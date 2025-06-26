@@ -206,7 +206,7 @@ const processUserQuery = async (userQuery, contextObj = {}) => {
     }
   }
 
-  // 日志输出
+  // debug log
   console.log('[processUserQuery]', {
     userQuery,
     contextObj,
@@ -268,7 +268,7 @@ const processUserQuery = async (userQuery, contextObj = {}) => {
     }
   }
 
-  // 3. 兼容性信息到上下文
+  // 3. compatibility information to context
   if (modelNumber) {
     const compatibility = compatibilityMatrix[modelNumber];
     if (compatibility) {
@@ -276,7 +276,7 @@ const processUserQuery = async (userQuery, contextObj = {}) => {
     }
   }
 
-  // 4. 其他情况，走原有 DeepSeek
+  // 4. other cases, go to original DeepSeek
   const aiContent = await callDeepSeekAPI(userQuery, context);
   return { role: 'assistant', content: aiContent };
 };
@@ -452,17 +452,17 @@ app.get('/api/products/enhanced', async (req, res) => {
       return res.status(400).json({ error: 'Query parameter is required' });
     }
     
-    // 使用语义搜索获取相关产品
+    // use semantic search to get relevant products
     const semanticResults = await vectorDBService.semanticSearch(query, 10);
     
-    // 转换为产品格式
+    // convert to product format
     const products = semanticResults.map(result => ({
       id: result.metadata.partNumber,
       partNumber: result.metadata.partNumber,
       name: result.metadata.name,
       category: result.metadata.category,
       price: result.metadata.price,
-      stockQuantity: 15, // 模拟库存
+      stockQuantity: 15, // mock stock
       compatibility: result.metadata.compatibility,
       installation: result.metadata.installation,
       troubleshooting: result.metadata.troubleshooting,
@@ -471,7 +471,7 @@ app.get('/api/products/enhanced', async (req, res) => {
       relevanceScore: result.score
     }));
     
-    // 按类别过滤（如果指定）
+    // filter by category (if specified)
     let filteredProducts = products;
     if (category) {
       filteredProducts = products.filter(product => 
@@ -499,8 +499,8 @@ app.get('/api/partselect/:partNumber', async (req, res) => {
     // Build PartSelect URL
     const partSelectUrl = `https://www.partselect.com/PS${partNumber}-Whirlpool-Refrigerator-Door-Bin.htm?SourceCode=3&SearchTerm=PS${partNumber}`;
     
-    // 这里可以添加实际的网页抓取逻辑
-    // 由于CORS限制，我们返回模拟的真实数据
+    // here we can add actual web scraping logic
+    // due to CORS restrictions, we return mock real data
     const realProductData = {
       partNumber: partNumber,
       name: `Whirlpool ${partNumber} - Real PartSelect Data`,
@@ -522,16 +522,16 @@ app.get('/api/partselect/:partNumber', async (req, res) => {
   }
 });
 
-// 增强的产品搜索API（结合PartSelect数据）
+// enhanced product search API (combined with PartSelect data)
 app.get('/api/products/partselect/:partNumber', async (req, res) => {
   try {
     const { partNumber } = req.params;
     
-    // 首先从本地数据库查找
+    // first search from local database
     const localProduct = sampleProducts.find(p => p.partNumber === partNumber);
     
     if (localProduct) {
-      // 尝试获取PartSelect真实数据
+        // try to get PartSelect real data
       try {
         const partSelectData = await axios.get(`http://localhost:3001/api/partselect/${partNumber}`);
         const enhancedProduct = {
@@ -541,7 +541,7 @@ app.get('/api/products/partselect/:partNumber', async (req, res) => {
         };
         res.json(enhancedProduct);
       } catch (error) {
-        // 如果获取PartSelect数据失败，返回本地数据
+        // if PartSelect data retrieval fails, return local data
         res.json({
           ...localProduct,
           hasRealData: false

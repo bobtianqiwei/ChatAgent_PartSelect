@@ -73,7 +73,7 @@
   overflow: hidden;
 }
 
-/* 安装指南样式 */
+/* installation guide style */
 .installation-compact {
   margin-bottom: 16px;
 }
@@ -158,7 +158,7 @@
   color: white;
 }
 
-/* 操作按钮 */
+/* action buttons */
 .product-actions-compact {
   text-align: center;
 }
@@ -183,7 +183,7 @@
   transform: translateY(-1px);
 }
 
-/* 模态框样式 */
+/* modal style */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -258,7 +258,7 @@
   min-height: 0;
 }
 
-/* 响应式设计 */
+/* responsive design */
 @media (max-width: 768px) {
   .product-card-compact {
     max-width: 100%;
@@ -289,6 +289,6 @@
 }
 
 .sidebar {
-  /* ...其他样式... */
-  border-radius: 35px;  /* ← 这里就是 product card 外围的圆角 */
+  /* ...other styles... */
+  border-radius: 35px;  /* ← here is the rounded corner of the product card */
 } 

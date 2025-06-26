@@ -103,7 +103,7 @@ html, body, #root, .App {
   align-items: stretch;
   justify-content: center;
   min-height: 0;
-  height: calc(100vh - 120px); /* header+footer 约60px各 */
+  height: calc(100vh - 120px); /* header+footer about 60px each */
 }
 
 .footer {
@@ -262,7 +262,7 @@ html, body, #root, .App {
   max-width: 600px;
 }
 
-/* 响应式设计 */
+/* responsive design */
 @media (max-width: 1200px) {
   :root {
     --main-side-padding: 12px;
@@ -325,7 +325,7 @@ html, body, #root, .App {
   }
 }
 
-/* 滚动条样式 - 统一内嵌风格，自动隐藏 */
+/* scrollbar style - unified embedded style, auto hide */
 .product-area,
 .messages-scroll-area {
   scrollbar-width: thin;

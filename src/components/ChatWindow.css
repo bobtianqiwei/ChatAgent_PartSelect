@@ -173,7 +173,7 @@
   cursor: not-allowed;
 }
 
-/* 加载动画 */
+/* loading animation */
 .loading-message {
   display: flex;
   justify-content: flex-start;
@@ -220,7 +220,7 @@
   }
 }
 
-/* PartSelect品牌色彩 */
+/* PartSelect brand color */
 .messages-container {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
@@ -233,7 +233,7 @@
   background: linear-gradient(135deg, #e6b33d 0%, #d9a62e 100%);
 }
 
-/* 响应式设计 */
+/* responsive design */
 @media (max-width: 768px) {
   .messages-container {
     height: 60vh;
@@ -258,7 +258,7 @@
   }
 }
 
-/* 滚动条样式 - 统一内嵌风格 */
+/* scrollbar style - unified embedded style */
 .product-area::-webkit-scrollbar,
 .messages-scroll-area::-webkit-scrollbar {
   width: 6px;

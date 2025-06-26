@@ -164,7 +164,7 @@
   font-style: italic;
 }
 
-/* 响应式设计 */
+/* responsive design */
 @media (max-width: 768px) {
   .compatibility-checker {
     padding: 10px;
