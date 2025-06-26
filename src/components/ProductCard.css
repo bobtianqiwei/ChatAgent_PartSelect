@@ -51,7 +51,7 @@
 }
 
 .part-number {
-  color: #2c88aa;
+  color: #337778;
   font-size: 14px;
   font-weight: 500;
 }
@@ -79,7 +79,7 @@
 }
 
 .install-btn {
-  background: #2c88aa;
+  background: #337778;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -93,7 +93,7 @@
 }
 
 .install-btn:hover {
-  background: #1a5f7a;
+  background: #2a5f60;
 }
 
 .install-content {
@@ -130,7 +130,7 @@
 
 .click-hint {
   display: block;
-  color: #2c88aa;
+  color: #337778;
   font-size: 11px;
   font-style: italic;
   margin-top: 4px;
@@ -143,18 +143,18 @@
 
 .video-link-compact {
   display: inline-block;
-  color: #2c88aa;
+  color: #337778;
   text-decoration: none;
   font-size: 12px;
   font-weight: 500;
   padding: 6px 12px;
-  border: 1px solid #2c88aa;
+  border: 1px solid #337778;
   border-radius: 4px;
   transition: all 0.2s ease;
 }
 
 .video-link-compact:hover {
-  background: #2c88aa;
+  background: #337778;
   color: white;
 }
 
