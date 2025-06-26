@@ -172,13 +172,13 @@
             return item;
         }
 
-        // 加载所有图片
+        // load all images
         products.forEach(product => {
-            // 主图片
+            // main image
             imageGrid.appendChild(createImageItem(product.partNumber, 'main'));
             totalCount++;
             
-            // 安装图片
+            // installation image
             for (let i = 1; i <= 3; i++) {
                 imageGrid.appendChild(createImageItem(product.partNumber, 'install', i));
                 totalCount++;
