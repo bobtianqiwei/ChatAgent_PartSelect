@@ -21,26 +21,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 初始化向量数据库
+// Initialize vector database
 async function initializeVectorDB() {
   console.log('Initializing vector database...');
   await vectorDBService.initialize();
   
-  // 将产品数据上传到向量数据库
+  // Upload product data to vector database
   console.log('Uploading products to vector database...');
   await vectorDBService.upsertProducts(sampleProducts);
 }
 
-// 启动时初始化向量数据库
+// Initialize vector database on startup
 initializeVectorDB().catch(console.error);
 
-// 真实的DeepSeek API调用
+// Real DeepSeek API call
 const callDeepSeekAPI = async (userQuery, context = '') => {
   try {
-    // 使用向量数据库获取相关产品信息
+    // Get relevant product information using vector database
     const relevantProducts = await vectorDBService.getRelevantProducts(userQuery, 3);
     
-    // 构建产品上下文
+    // Build product context
     let productContext = '';
     if (relevantProducts.length > 0) {
       productContext = '\n\nRelevant Products:\n' + relevantProducts.map(product => 
@@ -48,7 +48,7 @@ const callDeepSeekAPI = async (userQuery, context = '') => {
       ).join('\n');
     }
 
-    // 构建系统提示词，包含PartSelect的业务上下文
+    // Build system prompt with PartSelect business context
     const systemPrompt = `You are a specialized assistant for PartSelect, an e-commerce website that ONLY sells refrigerator and dishwasher parts. 
 
 CRITICAL SCOPE LIMITATIONS - YOU MUST FOLLOW THESE RULES:
@@ -97,23 +97,23 @@ ${context}${productContext}`;
         'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
         'Content-Type': 'application/json'
       },
-      timeout: 30000 // 30秒超时
+      timeout: 30000 // 30 second timeout
     });
 
     return response.data.choices[0].message.content;
   } catch (error) {
     console.error('DeepSeek API Error:', error.response?.data || error.message);
     
-    // 如果API调用失败，回退到智能本地响应
+    // If API call fails, fall back to intelligent local response
     return await fallbackResponse(userQuery);
   }
 };
 
-// 回退响应函数（当DeepSeek API不可用时使用）
+// Fallback response function (used when DeepSeek API is unavailable)
 const fallbackResponse = async (userQuery) => {
   const query = userQuery.toLowerCase();
   
-  // 检查是否是安装问题
+  // Check if it's an installation question
   if (query.includes('install') || query.includes('installation')) {
     const partMatch = query.match(/part number (\w+)/i);
     if (partMatch) {
@@ -126,7 +126,7 @@ const fallbackResponse = async (userQuery) => {
     return "I can help you with installation instructions. Please provide the part number you need help with.";
   }
   
-  // 检查兼容性问题
+  // Check compatibility questions
   if (query.includes('compatible') || query.includes('compatibility')) {
     const modelMatch = query.match(/model[\s:]*([a-z0-9]+)/i);
     if (modelMatch) {
@@ -140,7 +140,7 @@ const fallbackResponse = async (userQuery) => {
     return "I can check part compatibility. Please provide your appliance model number.";
   }
   
-  // 检查故障排除
+  // Check troubleshooting
   if (query.includes('not working') || query.includes('broken') || query.includes('fix')) {
     if (query.includes('ice maker')) {
       const guide = troubleshootingGuides['ice maker not working'];
@@ -153,7 +153,7 @@ const fallbackResponse = async (userQuery) => {
     return "I can help with troubleshooting. Please describe the specific issue you're experiencing with your appliance.";
   }
   
-  // 产品搜索
+  // Product search
   const partMatch = query.match(/part number (\w+)/i);
   if (partMatch) {
     const partNumber = partMatch[1];
@@ -163,21 +163,21 @@ const fallbackResponse = async (userQuery) => {
     }
   }
   
-  // 默认响应
+  // Default response
   return "I'm your PartSelect assistant! I can help you with:\n\n• **Product information** - Search for parts by part number\n• **Compatibility checks** - Verify if parts work with your model\n• **Installation guides** - Step-by-step installation instructions\n• **Troubleshooting** - Help diagnose and fix appliance issues\n\nWhat can I help you with today?";
 };
 
-// 智能响应处理函数（增强版，支持 context）
+// Intelligent response processing function (enhanced version, supports context)
 const processUserQuery = async (userQuery, contextObj = {}) => {
   const query = userQuery.toLowerCase();
   let context = '';
 
-  // 1. 兼容性查询增强：支持 contextObj.lastPartNumber
+  // 1. Enhanced compatibility query: support contextObj.lastPartNumber
   const isCompatibilityQuery = query.includes('compatible') || query.includes('compatibility');
   let partNumber = null;
   let modelNumber = null;
 
-  // 先尝试从用户输入中提取 part number
+  // First try to extract part number from user input
   const partMatch = query.match(/ps\d{6,}/i);
   if (partMatch) {
     partNumber = partMatch[0].toUpperCase();
@@ -185,17 +185,17 @@ const processUserQuery = async (userQuery, contextObj = {}) => {
     partNumber = contextObj.lastPartNumber;
   }
 
-  // 提取 model number
+  // Extract model number
   let modelMatch = query.match(/model[\s:]*([a-z0-9]+)/i);
   let cleanQuery = null;
   let words = null;
   if (modelMatch) {
     modelNumber = modelMatch[1].toUpperCase();
   } else {
-    // 预处理 query，去除标点
+    // Preprocess query, remove punctuation
     cleanQuery = query.replace(/[^a-z0-9\s]/g, ' ');
     words = cleanQuery.split(/\s+/).map(w => w.toLowerCase());
-    // 支持各种自然语言表达，单词级匹配所有型号
+    // Support various natural language expressions, word-level matching for all models
     const allModels = Object.keys(compatibilityMatrix);
     for (const m of allModels) {
       console.log('[model match debug]', m.toLowerCase(), words);
@@ -217,12 +217,12 @@ const processUserQuery = async (userQuery, contextObj = {}) => {
     words
   });
 
-  // 如果是兼容性查询且有 partNumber 和 modelNumber，先查数据库
+  // If it's a compatibility query and we have both partNumber and modelNumber, check database first
   if (isCompatibilityQuery && partNumber && modelNumber) {
     const compatibility = compatibilityMatrix[modelNumber];
     let isCompatible = false;
     let compatibilityData = null;
-    // 查找 part 的类型
+    // Find the type of part
     const product = sampleProducts.find(p => p.partNumber === partNumber);
     const partType = product ? product.category.toLowerCase() : null;
     if (compatibility && product && partType) {
@@ -242,16 +242,16 @@ const processUserQuery = async (userQuery, contextObj = {}) => {
         ]
       };
     }
-    // 先返回数据库结果
+    // Return database result
     let dbResultMsg = isCompatible
       ? `Yes, part number ${partNumber} is compatible with model ${modelNumber}.`
       : `Sorry, part number ${partNumber} is NOT compatible with model ${modelNumber}.`;
-    // 强化prompt，将IMPORTANT提前并加分隔线
+    // Strengthen prompt, move IMPORTANT to the top and add a separator line
     const deepSeekPrompt = `IMPORTANT:\nYou MUST NOT contradict the database result below.\nOnly explain or elaborate on the database result, but do NOT change its meaning.\nIf the database result says compatible, you must say compatible.\nIf it says NOT compatible, you must say NOT compatible.\nDO NOT answer based on your own knowledge, only explain the database result.\n\n-----------------\nUser asked: ${userQuery}\nDatabase result: ${dbResultMsg}\n-----------------\n\nPlease explain this result to the user in a helpful way.`;
     console.log('[DeepSeek Compatibility Debug] dbResultMsg:', dbResultMsg);
     console.log('[DeepSeek Compatibility Debug] prompt:', deepSeekPrompt);
     const aiExplanation = await callDeepSeekAPI(deepSeekPrompt);
-    // 返回结构化结果
+    // Return structured result
     return {
       role: 'assistant',
       content: dbResultMsg + '\n\n' + aiExplanation,
@@ -260,7 +260,7 @@ const processUserQuery = async (userQuery, contextObj = {}) => {
     };
   }
 
-  // 2. 产品相关查询，添加产品信息到上下文
+  // 2. Product-related queries, add product information to context
   if (partNumber) {
     const product = sampleProducts.find(p => p.partNumber === partNumber);
     if (product) {
@@ -281,7 +281,7 @@ const processUserQuery = async (userQuery, contextObj = {}) => {
   return { role: 'assistant', content: aiContent };
 };
 
-// 聊天API（支持 context）
+// Chat API (supports context)
 app.post('/api/chat', async (req, res) => {
   try {
     const { message, context: contextObj = {} } = req.body;
@@ -300,14 +300,14 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// 产品搜索API
+// Product search API
 app.get('/api/products', (req, res) => {
   try {
     const { query, category } = req.query;
     let filteredProducts = sampleProducts;
 
     if (query) {
-      // 优先精确匹配partNumber
+      // Prioritize exact partNumber matching
       const exact = sampleProducts.filter(product => product.partNumber.toUpperCase() === query.toUpperCase());
       if (exact.length > 0) {
         filteredProducts = exact;
@@ -333,7 +333,7 @@ app.get('/api/products', (req, res) => {
   }
 });
 
-// 兼容性检查API
+// Compatibility check API
 app.get('/api/compatibility', (req, res) => {
   try {
     const { modelNumber } = req.query;
@@ -373,7 +373,7 @@ app.get('/api/compatibility', (req, res) => {
   }
 });
 
-// 安装指南API
+// Installation guide API
 app.get('/api/installation/:partNumber', (req, res) => {
   try {
     const { partNumber } = req.params;
@@ -390,7 +390,7 @@ app.get('/api/installation/:partNumber', (req, res) => {
   }
 });
 
-// 故障排除API
+// Troubleshooting API
 app.get('/api/troubleshooting', (req, res) => {
   try {
     const { issue } = req.query;
@@ -421,7 +421,7 @@ app.get('/api/troubleshooting', (req, res) => {
   }
 });
 
-// 语义搜索API
+// Semantic search API
 app.get('/api/semantic-search', async (req, res) => {
   try {
     const { query, limit = 5 } = req.query;
@@ -443,7 +443,7 @@ app.get('/api/semantic-search', async (req, res) => {
   }
 });
 
-// 增强的产品搜索API（结合语义搜索）
+// Enhanced product search API (combines semantic search)
 app.get('/api/products/enhanced', async (req, res) => {
   try {
     const { query, category } = req.query;
@@ -491,12 +491,12 @@ app.get('/api/products/enhanced', async (req, res) => {
   }
 });
 
-// 获取PartSelect真实产品数据
+// Get PartSelect real product data
 app.get('/api/partselect/:partNumber', async (req, res) => {
   try {
     const { partNumber } = req.params;
     
-    // 构建PartSelect URL
+    // Build PartSelect URL
     const partSelectUrl = `https://www.partselect.com/PS${partNumber}-Whirlpool-Refrigerator-Door-Bin.htm?SourceCode=3&SearchTerm=PS${partNumber}`;
     
     // 这里可以添加实际的网页抓取逻辑
