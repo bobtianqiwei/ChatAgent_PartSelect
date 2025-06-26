@@ -33,9 +33,6 @@ function App() {
           <span className="logo-text">PartSelect</span>
           <span className="logo-subtitle">Chat Assistant</span>
         </div>
-        <div className="header-info">
-          <p>Your expert guide for refrigerator and dishwasher parts</p>
-        </div>
       </div>
       
       <div
@@ -54,7 +51,6 @@ function App() {
           >
             <div className="sidebar-header">
               <h3>Product Information</h3>
-              <p>Selected parts will appear here</p>
             </div>
             <div className="product-area">
               {currentProduct ? (
@@ -88,9 +84,10 @@ function App() {
         </section>
       </div>
       
-      <div className="footer">
-        <p>© 2024 PartSelect. All rights reserved.</p>
-      </div>
+      <footer className="app-footer">
+        <span className="footer-disclaimer">Prototype by Bob Tianqi Wei · June 2025 · For presentation only.
+        </span>
+      </footer>
     </div>
   );
 }
