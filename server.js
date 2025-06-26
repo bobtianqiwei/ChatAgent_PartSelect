@@ -15,14 +15,39 @@ const cors = require('cors');
 const axios = require('axios');
 const { sampleProducts, compatibilityMatrix, installationGuides, troubleshootingGuides } = require('./src/data/sampleProducts.js');
 const { DEEPSEEK_API_KEY, DEEPSEEK_API_URL } = require('./config.js');
+const vectorDBService = require('./src/services/vectorDB.js');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 初始化向量数据库
+async function initializeVectorDB() {
+  console.log('Initializing vector database...');
+  await vectorDBService.initialize();
+  
+  // 将产品数据上传到向量数据库
+  console.log('Uploading products to vector database...');
+  await vectorDBService.upsertProducts(sampleProducts);
+}
+
+// 启动时初始化向量数据库
+initializeVectorDB().catch(console.error);
+
 // 真实的DeepSeek API调用
 const callDeepSeekAPI = async (userQuery, context = '') => {
   try {
+    // 使用向量数据库获取相关产品信息
+    const relevantProducts = await vectorDBService.getRelevantProducts(userQuery, 3);
+    
+    // 构建产品上下文
+    let productContext = '';
+    if (relevantProducts.length > 0) {
+      productContext = '\n\nRelevant Products:\n' + relevantProducts.map(product => 
+        `- ${product.name} (${product.partNumber}): $${product.price} - ${product.description}`
+      ).join('\n');
+    }
+
     // 构建系统提示词，包含PartSelect的业务上下文
     const systemPrompt = `You are a helpful assistant for PartSelect, an e-commerce website specializing in refrigerator and dishwasher parts. 
 
@@ -40,7 +65,7 @@ Available product data includes:
 
 Always be helpful, accurate, and focused on appliance parts. If you don't have specific information about a part or model, suggest contacting customer service or checking the PartSelect website.
 
-${context}`;
+${context}${productContext}`;
 
     const response = await axios.post(DEEPSEEK_API_URL, {
       model: 'deepseek-chat',
@@ -303,6 +328,76 @@ app.get('/api/troubleshooting', (req, res) => {
   }
 });
 
+// 语义搜索API
+app.get('/api/semantic-search', async (req, res) => {
+  try {
+    const { query, limit = 5 } = req.query;
+    
+    if (!query) {
+      return res.status(400).json({ error: 'Query parameter is required' });
+    }
+    
+    const results = await vectorDBService.semanticSearch(query, parseInt(limit));
+    
+    res.json({
+      query,
+      results,
+      total: results.length
+    });
+  } catch (error) {
+    console.error('Semantic search error:', error);
+    res.status(500).json({ error: 'Semantic search failed' });
+  }
+});
+
+// 增强的产品搜索API（结合语义搜索）
+app.get('/api/products/enhanced', async (req, res) => {
+  try {
+    const { query, category } = req.query;
+    
+    if (!query) {
+      return res.status(400).json({ error: 'Query parameter is required' });
+    }
+    
+    // 使用语义搜索获取相关产品
+    const semanticResults = await vectorDBService.semanticSearch(query, 10);
+    
+    // 转换为产品格式
+    const products = semanticResults.map(result => ({
+      id: result.metadata.partNumber,
+      partNumber: result.metadata.partNumber,
+      name: result.metadata.name,
+      category: result.metadata.category,
+      price: result.metadata.price,
+      stockQuantity: 15, // 模拟库存
+      compatibility: result.metadata.compatibility,
+      installation: result.metadata.installation,
+      troubleshooting: result.metadata.troubleshooting,
+      description: result.metadata.description,
+      image: `https://via.placeholder.com/200x150?text=${result.metadata.partNumber}`,
+      relevanceScore: result.score
+    }));
+    
+    // 按类别过滤（如果指定）
+    let filteredProducts = products;
+    if (category) {
+      filteredProducts = products.filter(product => 
+        product.category.toLowerCase() === category.toLowerCase()
+      );
+    }
+    
+    res.json({
+      query,
+      products: filteredProducts,
+      total: filteredProducts.length,
+      searchType: 'semantic'
+    });
+  } catch (error) {
+    console.error('Enhanced product search error:', error);
+    res.status(500).json({ error: 'Enhanced product search failed' });
+  }
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`PartSelect Chat Server running on port ${PORT}`);
@@ -312,4 +407,6 @@ app.listen(PORT, () => {
   console.log(`- GET /api/compatibility - Check part compatibility`);
   console.log(`- GET /api/installation/:partNumber - Get installation guide`);
   console.log(`- GET /api/troubleshooting - Get troubleshooting help`);
+  console.log(`- GET /api/semantic-search - Semantic search`);
+  console.log(`- GET /api/products/enhanced - Enhanced product search`);
 }); 
