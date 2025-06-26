@@ -1,5 +1,10 @@
 @import "rsuite/dist/rsuite.css";
 
+:root {
+  --ps-btn-radius: 18px;
+  --ps-bubble-radius: 18px;
+}
+
 .chat-window {
   display: flex;
   flex-direction: column;
@@ -278,10 +283,6 @@
   background: #a8a8a8;
 }
 
-:root {
-  --ps-btn-radius: 25px;
-  --ps-bubble-radius: 18px;
-}
 
 .send-button {
   border-radius: var(--ps-btn-radius);
