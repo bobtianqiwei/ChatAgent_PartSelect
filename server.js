@@ -115,9 +115,9 @@ const fallbackResponse = async (userQuery) => {
   
   // Check if it's an installation question
   if (query.includes('install') || query.includes('installation')) {
-    const partMatch = query.match(/part number (\w+)/i);
+    const partMatch = query.match(/part number (ps\d+)/i);
     if (partMatch) {
-      const partNumber = partMatch[1];
+      const partNumber = partMatch[1].toUpperCase();
       const guide = installationGuides[partNumber];
       if (guide) {
         return `Here's how to install part number ${partNumber}:\n\n**${guide.title}**\n\n**Difficulty:** ${guide.difficulty}\n**Time:** ${guide.time}\n\n**Steps:**\n${guide.steps.map((step, index) => `${index + 1}. ${step}`).join('\n')}\n\n**Tools needed:** ${guide.tools.join(', ')}`;
@@ -154,9 +154,9 @@ const fallbackResponse = async (userQuery) => {
   }
   
   // Product search
-  const partMatch = query.match(/part number (\w+)/i);
+  const partMatch = query.match(/part number (ps\d+)/i);
   if (partMatch) {
-    const partNumber = partMatch[1];
+    const partNumber = partMatch[1].toUpperCase();
     const product = sampleProducts.find(p => p.partNumber === partNumber);
     if (product) {
       return `**${product.name}**\n\n**Part Number:** ${product.partNumber}\n**Price:** $${product.price}\n**Stock:** ${product.stockQuantity} available\n**Category:** ${product.category}\n\n**Description:** ${product.description}\n\n**Installation:** ${product.installation}\n\n**Compatible models:** ${product.compatibility.join(', ')}`;
