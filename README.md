@@ -81,6 +81,13 @@ ChatAgent_PartSelect/
    ```
 
 3. **Start the application**
+
+   Start the backend server:
+   ```bash
+   node server.js
+   ```
+   
+   Start the frontend (in a new terminal):
    ```bash
    npm start
    ```
