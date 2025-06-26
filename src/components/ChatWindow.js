@@ -25,6 +25,7 @@ function ChatWindow({ onProductDisplay }) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const [lastPartNumber, setLastPartNumber] = useState(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -37,58 +38,97 @@ function ChatWindow({ onProductDisplay }) {
   // 智能消息处理 - 优先使用DeepSeek API，同时保留特殊功能
   const processUserQuery = async (userQuery) => {
     const query = userQuery.toLowerCase();
-    
-    // 首先尝试获取DeepSeek AI响应
-    let aiResponse = await getAIMessage(userQuery);
-    
-    // 检查是否需要显示产品卡片
-    if (query.includes('part number') || query.includes('search for')) {
-      const partMatch = query.match(/part number (\w+)/i);
-      if (partMatch) {
-        const partNumber = partMatch[1];
-        const products = await searchProducts(partNumber);
-        if (products.length > 0) {
-          // 通知父组件显示产品
-          if (onProductDisplay) {
-            onProductDisplay(products[0]);
-          }
-          return {
-            ...aiResponse,
-            type: "product",
-            product: products[0]
-          };
-        }
+    let partNumber = null;
+    // 1. 识别part number
+    const partMatch = query.match(/part number (ps\d+)/i);
+    if (partMatch) {
+      partNumber = partMatch[1].toUpperCase();
+      setLastPartNumber(partNumber);
+      // 主动查找产品并显示product card
+      const products = await searchProducts(partNumber);
+      if (products.length > 0 && onProductDisplay) {
+        onProductDisplay(products[0]);
       }
     }
-    
-    // 检查是否需要显示兼容性检查
-    if (query.includes('compatible') || query.includes('compatibility')) {
+    // 2. 识别this part指代
+    if (!partNumber && /this part/.test(query) && lastPartNumber) {
+      partNumber = lastPartNumber;
+    }
+    // 3. 兼容性查询
+    if ((query.includes('compatible') || query.includes('compatibility')) && partNumber) {
       const modelMatch = query.match(/model (\w+)/i);
       if (modelMatch) {
         const modelNumber = modelMatch[1];
         const compatibilityData = await checkCompatibility(modelNumber);
-        if (compatibilityData.compatible) {
-          return {
-            ...aiResponse,
-            type: "compatibility",
-            data: compatibilityData
-          };
+        // 检查partNumber是否在兼容列表
+        const isCompatible =
+          (compatibilityData.refrigerator && compatibilityData.refrigerator.includes(partNumber)) ||
+          (compatibilityData.dishwasher && compatibilityData.dishwasher.includes(partNumber));
+        // 查找并显示product card
+        const products = await searchProducts(partNumber);
+        if (products.length > 0 && onProductDisplay) {
+          onProductDisplay(products[0]);
         }
+        return {
+          role: "assistant",
+          content: isCompatible
+            ? `Yes, part number ${partNumber} is compatible with model ${modelNumber}.`
+            : `Sorry, part number ${partNumber} is NOT compatible with model ${modelNumber}.`,
+          type: "compatibility",
+          data: compatibilityData
+        };
       }
     }
-    
-    // 返回DeepSeek AI响应
+    // 4. 其他情况，走原有逻辑，传递 context
+    let aiResponse = await getAIMessage(userQuery, { lastPartNumber });
     return aiResponse;
   };
 
   const handleSend = async (input) => {
     if (input.trim() === "") return;
-    
     setIsLoading(true);
     setMessages(prev => [...prev, { role: "user", content: input }]);
     setInput("");
 
     try {
+      const query = input.toLowerCase();
+      // 1. 捕获part number（无论上下文）
+      let partNumber = null;
+      const partNumberMatch = input.match(/ps\d{6,}/i);
+      if (partNumberMatch) {
+        partNumber = partNumberMatch[0].toUpperCase();
+        setLastPartNumber(partNumber);
+      } else if (lastPartNumber) {
+        partNumber = lastPartNumber;
+      }
+
+      // 2. 检测兼容性查询
+      if ((query.includes('compatible') || query.includes('compatibility')) && partNumber) {
+        const modelMatch = query.match(/model (\w+)/i);
+        if (modelMatch) {
+          const modelNumber = modelMatch[1];
+          setMessages(prev => [...prev, { role: "assistant", content: "Checking compatibility in the database..." }]);
+          const compatibilityData = await checkCompatibility(modelNumber);
+          const isCompatible =
+            (compatibilityData.refrigerator && compatibilityData.refrigerator.includes(partNumber)) ||
+            (compatibilityData.dishwasher && compatibilityData.dishwasher.includes(partNumber));
+          setMessages(prev => [...prev, {
+            role: "assistant",
+            content: isCompatible
+              ? `Yes, part number ${partNumber} is compatible with model ${modelNumber}.`
+              : `Sorry, part number ${partNumber} is NOT compatible with model ${modelNumber}.`,
+            type: "compatibility",
+            data: compatibilityData
+          }]);
+          const deepSeekPrompt = `User asked: ${input}\nDatabase result: Part number ${partNumber} is ${isCompatible ? 'compatible' : 'NOT compatible'} with model ${modelNumber}. Please explain this result to the user in a helpful way.`;
+          const aiResponse = await getAIMessage(deepSeekPrompt);
+          setMessages(prev => [...prev, { role: "assistant", content: aiResponse.content }]);
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // 其余情况走原有逻辑，传递 context
       const response = await processUserQuery(input);
       setMessages(prev => [...prev, response]);
     } catch (error) {

@@ -6,7 +6,7 @@ const sampleProducts = [
     category: "Refrigerator",
     price: 41.23,
     stockQuantity: 15,
-    compatibility: ["WDT780SAEM1", "WDT750SAEM1", "WDT720SAEM1", "ED5FVGXWS01", "WSF26C3EXW01", "WSF26C3EXF01", "ED2KHAXVL00"],
+    compatibility: ["ED5FVGXWS01", "WSF26C3EXW01", "WSF26C3EXF01", "ED2KHAXVL00"],
     installation: "Tool-free installation. Simply align the new bin with the door shelf and snap it into place. The installation takes less than 15 minutes and is rated as 'Really Easy' by customers.",
     troubleshooting: "If the bin doesn't fit properly, check for cracks or broken clips. Ensure the door shelf is clean and free of debris. This part fixes symptoms like door won't open or close, ice maker won't dispense ice, and leaking issues.",
     description: "Genuine OEM replacement refrigerator door bin designed to fit many side-by-side refrigerator models. Compatible with brands like KitchenAid, Maytag, and Amana. Features a clear design with white trim, providing storage for jars and bottles. Installation is tool-free—simply align and snap into place.",
@@ -36,7 +36,7 @@ const sampleProducts = [
     category: "Refrigerator",
     price: 89.99,
     stockQuantity: 8,
-    compatibility: ["WDT780SAEM1", "WDT750SAEM1"],
+    compatibility: ["ED5FVGXWS01", "WSF26C3EXW01", "WSF26C3EXF01", "ED2KHAXVL00"],
     installation: "Professional installation recommended. Requires disconnecting power, removing old ice maker, and connecting new assembly.",
     troubleshooting: "If ice maker is not working, check water supply, temperature settings, and electrical connections. Clean ice maker regularly.",
     description: "Complete ice maker assembly for Whirlpool refrigerators. Includes all necessary components for ice production.",
@@ -96,7 +96,7 @@ const sampleProducts = [
     category: "Refrigerator",
     price: 19.99,
     stockQuantity: 45,
-    compatibility: ["WDT780SAEM1", "WDT750SAEM1", "WDT720SAEM1"],
+    compatibility: ["ED5FVGXWS01", "WSF26C3EXW01", "WSF26C3EXF01", "ED2KHAXVL00"],
     installation: "Turn off water supply, remove old filter, install new filter. Run water for 2-3 minutes to flush.",
     troubleshooting: "Replace filter every 6 months or when water flow decreases. Check for leaks after installation.",
     description: "Genuine Whirlpool water filter. Removes impurities and improves water taste.",
@@ -113,15 +113,29 @@ const sampleProducts = [
 
 const compatibilityMatrix = {
   "WDT780SAEM1": {
-    refrigerator: ["PS11752778", "PS11752779", "PS11752782"],
-    dishwasher: ["PS11752780", "PS11752781"]
+    refrigerator: [],
+    dishwasher: ["PS11752780", "PS11752781"],
+    additional: [
+      "PS3406971",
+      "PS10065979",
+      "PS972325",
+      "PS11746591",
+      "PS11745496",
+      "PS11750093",
+      "PS12348515",
+      "PS11753379",
+      "PS11750092",
+      "PS11756967",
+      "PS9494999",
+      "PS12347809"
+    ]
   },
   "WDT750SAEM1": {
-    refrigerator: ["PS11752778", "PS11752779", "PS11752782"],
+    refrigerator: [],
     dishwasher: ["PS11752780", "PS11752781"]
   },
   "WDT720SAEM1": {
-    refrigerator: ["PS11752778", "PS11752782"],
+    refrigerator: [],
     dishwasher: ["PS11752780"]
   }
 };
@@ -192,6 +206,36 @@ const troubleshootingGuides = {
     ]
   }
 };
+
+const ensureParts = [
+  { partNumber: "PS3406971", name: "Lower Dishrack Wheel", category: "Dishwasher", description: "协助洗碗架顺滑滑出滑入" },
+  { partNumber: "PS10065979", name: "Upper Rack Adjuster Kit", category: "Dishwasher", description: "用于调整上碗架高度" },
+  { partNumber: "PS972325", name: "Door Balance Link Kit", category: "Dishwasher", description: "支撑打开/关闭门的重量" },
+  { partNumber: "PS11746591", name: "Rack Track Stop", category: "Dishwasher", description: "防止碗架滑出轨道" },
+  { partNumber: "PS11745496", name: "Mounting Bracket", category: "Dishwasher", description: "固定洗碗机与台面连接" },
+  { partNumber: "PS11750093", name: "Rack Positioner / Adjuster", category: "Dishwasher", description: "固定并调整碗架高低" },
+  { partNumber: "PS12348515", name: "Door Seal", category: "Dishwasher", description: "防止漏水，密封门边缘" },
+  { partNumber: "PS11753379", name: "Drain Pump", category: "Dishwasher", description: "负责排水，防止积水" },
+  { partNumber: "PS11750092", name: "Dishrack Adjuster", category: "Dishwasher", description: "协调碗架上下调节功能" },
+  { partNumber: "PS11756967", name: "Door Latch", category: "Dishwasher", description: "保持门闭合使设备启动" },
+  { partNumber: "PS9494999", name: "Heating Element", category: "Dishwasher", description: "提高洗涤水温并用于干燥" },
+  { partNumber: "PS12347809", name: "Silverware Basket", category: "Dishwasher", description: "安放餐具的小篮子" }
+];
+
+ensureParts.forEach(part => {
+  if (!sampleProducts.find(p => p.partNumber === part.partNumber)) {
+    sampleProducts.push({
+      ...part,
+      price: 0,
+      stockQuantity: 0,
+      compatibility: ["WDT780SAEM1"],
+      installation: "",
+      troubleshooting: "",
+      image: "",
+      partSelectUrl: ""
+    });
+  }
+});
 
 module.exports = {
   sampleProducts,

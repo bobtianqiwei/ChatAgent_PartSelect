@@ -128,9 +128,9 @@ const fallbackResponse = async (userQuery) => {
   
   // 检查兼容性问题
   if (query.includes('compatible') || query.includes('compatibility')) {
-    const modelMatch = query.match(/model (\w+)/i);
+    const modelMatch = query.match(/model[\s:]*([a-z0-9]+)/i);
     if (modelMatch) {
-      const modelNumber = modelMatch[1];
+      const modelNumber = modelMatch[1].toUpperCase();
       const compatibility = compatibilityMatrix[modelNumber];
       if (compatibility) {
         const compatibleParts = [...compatibility.refrigerator, ...compatibility.dishwasher];
@@ -167,57 +167,132 @@ const fallbackResponse = async (userQuery) => {
   return "I'm your PartSelect assistant! I can help you with:\n\n• **Product information** - Search for parts by part number\n• **Compatibility checks** - Verify if parts work with your model\n• **Installation guides** - Step-by-step installation instructions\n• **Troubleshooting** - Help diagnose and fix appliance issues\n\nWhat can I help you with today?";
 };
 
-// 智能响应处理函数
-const processUserQuery = async (userQuery) => {
+// 智能响应处理函数（增强版，支持 context）
+const processUserQuery = async (userQuery, contextObj = {}) => {
   const query = userQuery.toLowerCase();
-  
-  // 构建上下文信息
   let context = '';
-  
-  // 如果是产品相关查询，添加产品信息到上下文
-  const partMatch = query.match(/part number (\w+)/i);
+
+  // 1. 兼容性查询增强：支持 contextObj.lastPartNumber
+  const isCompatibilityQuery = query.includes('compatible') || query.includes('compatibility');
+  let partNumber = null;
+  let modelNumber = null;
+
+  // 先尝试从用户输入中提取 part number
+  const partMatch = query.match(/ps\d{6,}/i);
   if (partMatch) {
-    const partNumber = partMatch[1];
-    const product = sampleProducts.find(p => p.partNumber === partNumber);
-    if (product) {
-      context = `\nProduct Information:\n- Name: ${product.name}\n- Part Number: ${product.partNumber}\n- Price: $${product.price}\n- Category: ${product.category}\n- Description: ${product.description}\n- Installation: ${product.installation}\n- Compatible Models: ${product.compatibility.join(', ')}`;
+    partNumber = partMatch[0].toUpperCase();
+  } else if (contextObj.lastPartNumber) {
+    partNumber = contextObj.lastPartNumber;
+  }
+
+  // 提取 model number
+  let modelMatch = query.match(/model[\s:]*([a-z0-9]+)/i);
+  let cleanQuery = null;
+  let words = null;
+  if (modelMatch) {
+    modelNumber = modelMatch[1].toUpperCase();
+  } else {
+    // 预处理 query，去除标点
+    cleanQuery = query.replace(/[^a-z0-9\s]/g, ' ');
+    words = cleanQuery.split(/\s+/).map(w => w.toLowerCase());
+    // 支持各种自然语言表达，单词级匹配所有型号
+    const allModels = Object.keys(compatibilityMatrix);
+    for (const m of allModels) {
+      console.log('[model match debug]', m.toLowerCase(), words);
+      if (words.includes(m.toLowerCase())) {
+        modelNumber = m;
+        break;
+      }
     }
   }
-  
-  // 如果是兼容性查询，添加兼容性信息到上下文
-  const modelMatch = query.match(/model (\w+)/i);
-  if (modelMatch) {
-    const modelNumber = modelMatch[1];
+
+  // 日志输出
+  console.log('[processUserQuery]', {
+    userQuery,
+    contextObj,
+    isCompatibilityQuery,
+    partNumber,
+    modelNumber,
+    cleanQuery,
+    words
+  });
+
+  // 如果是兼容性查询且有 partNumber 和 modelNumber，先查数据库
+  if (isCompatibilityQuery && partNumber && modelNumber) {
+    const compatibility = compatibilityMatrix[modelNumber];
+    let isCompatible = false;
+    let compatibilityData = null;
+    // 查找 part 的类型
+    const product = sampleProducts.find(p => p.partNumber === partNumber);
+    const partType = product ? product.category.toLowerCase() : null;
+    if (compatibility && product && partType) {
+      if (partType === 'refrigerator' && compatibility.refrigerator && compatibility.refrigerator.includes(partNumber)) {
+        isCompatible = true;
+      }
+      if (partType === 'dishwasher' && compatibility.dishwasher && compatibility.dishwasher.includes(partNumber)) {
+        isCompatible = true;
+      }
+      compatibilityData = {
+        modelNumber,
+        refrigerator: compatibility.refrigerator,
+        dishwasher: compatibility.dishwasher,
+        products: [
+          ...compatibility.refrigerator.map(pn => sampleProducts.find(p => p.partNumber === pn)).filter(Boolean),
+          ...compatibility.dishwasher.map(pn => sampleProducts.find(p => p.partNumber === pn)).filter(Boolean)
+        ]
+      };
+    }
+    // 先返回数据库结果
+    let dbResultMsg = isCompatible
+      ? `Yes, part number ${partNumber} is compatible with model ${modelNumber}.`
+      : `Sorry, part number ${partNumber} is NOT compatible with model ${modelNumber}.`;
+    // 再拼 prompt 给 DeepSeek
+    const deepSeekPrompt = `User asked: ${userQuery}\nDatabase result: ${dbResultMsg} Please explain this result to the user in a helpful way.`;
+    const aiExplanation = await callDeepSeekAPI(deepSeekPrompt);
+    // 返回结构化结果
+    return {
+      role: 'assistant',
+      content: dbResultMsg + '\n\n' + aiExplanation,
+      type: 'compatibility',
+      data: compatibilityData
+    };
+  }
+
+  // 2. 产品相关查询，添加产品信息到上下文
+  if (partNumber) {
+    const product = sampleProducts.find(p => p.partNumber === partNumber);
+    if (product) {
+      context += `\nProduct Information:\n- Name: ${product.name}\n- Part Number: ${product.partNumber}\n- Price: $${product.price}\n- Category: ${product.category}\n- Description: ${product.description}\n- Installation: ${product.installation}\n- Compatible Models: ${product.compatibility.join(', ')}`;
+    }
+  }
+
+  // 3. 兼容性信息到上下文
+  if (modelNumber) {
     const compatibility = compatibilityMatrix[modelNumber];
     if (compatibility) {
       context += `\nCompatibility Information for Model ${modelNumber}:\n- Refrigerator Parts: ${compatibility.refrigerator.join(', ')}\n- Dishwasher Parts: ${compatibility.dishwasher.join(', ')}`;
     }
   }
-  
-  // 调用DeepSeek API
-  return await callDeepSeekAPI(userQuery, context);
+
+  // 4. 其他情况，走原有 DeepSeek
+  const aiContent = await callDeepSeekAPI(userQuery, context);
+  return { role: 'assistant', content: aiContent };
 };
 
-// 聊天API
+// 聊天API（支持 context）
 app.post('/api/chat', async (req, res) => {
   try {
-    const { message } = req.body;
-    
+    const { message, context: contextObj = {} } = req.body;
     if (!message) {
       return res.status(400).json({ error: 'Message is required' });
     }
-    
-    console.log('Processing user query:', message);
-    const response = await processUserQuery(message);
-    
-    res.json({
-      role: "assistant",
-      content: response
-    });
+    console.log('[POST /api/chat] message:', message, 'context:', contextObj);
+    const response = await processUserQuery(message, contextObj);
+    res.json(response);
   } catch (error) {
     console.error('Chat API error:', error);
     res.status(500).json({ 
-      role: "assistant",
+      role: 'assistant',
       content: "I'm sorry, I encountered an error. Please try again." 
     });
   }

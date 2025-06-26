@@ -3,10 +3,11 @@ import axios from 'axios';
 const API_BASE_URL = 'http://localhost:3001/api';
 
 // 聊天API
-export const getAIMessage = async (userQuery) => {
+export const getAIMessage = async (userQuery, context = {}) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/chat`, {
-      message: userQuery
+      message: userQuery,
+      context
     });
     return response.data;
   } catch (error) {
