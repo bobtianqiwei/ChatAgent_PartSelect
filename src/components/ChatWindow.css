@@ -1,77 +1,134 @@
 @import "rsuite/dist/rsuite.css";
 
-.messages-container {
+.chat-window {
   display: flex;
   flex-direction: column;
-  height: 70vh;
-  max-width: 800px;
-  margin: 0 auto;
-  background: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
+  height: 100%;
+  background: white;
+  border-radius: 35px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
 }
 
 .messages-scroll-area {
   flex: 1;
   overflow-y: auto;
-  padding: 20px 20px 0 20px;
+  overflow-x: hidden;
+  padding: var(--bubble-padding);
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+  display: flex;
+  flex-direction: column;
 }
 
-.user-message-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 16px;
+.messages-scroll-area::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+.messages-scroll-area::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+.messages-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+.messages-scroll-area::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
 }
 
-.assistant-message-container {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 16px;
+/* 聊天气泡与边缘距离 */
+.message-row {
+  margin-bottom: 12px;
 }
 
 .message {
+  background: #fff;
+  border-radius: var(--ps-bubble-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 12px 18px;
+  margin-bottom: 12px;
+  display: inline-block;
+  position: relative;
+  word-break: break-word;
+  font-size: 1rem;
+  line-height: 1.6;
   max-width: 70%;
-  padding: 12px 16px;
-  border-radius: 18px;
-  word-wrap: break-word;
-  line-height: 1.4;
+  align-self: flex-start;
+  border-bottom-left-radius: var(--ps-bubble-radius);
+  border-bottom-right-radius: var(--ps-bubble-radius);
 }
 
-.user-message {
-  background: #1a5f7a;
-  color: white;
+.message.user-message {
+  background: linear-gradient(135deg, #1a5f7a 0%, #2c88aa 100%);
+  color: #fff;
+  align-self: flex-end;
+  margin-left: auto;
+  margin-right: 0;
   border-bottom-right-radius: 4px;
+  border-bottom-left-radius: var(--ps-bubble-radius);
+  border-top-left-radius: var(--ps-bubble-radius);
+  border-top-right-radius: var(--ps-bubble-radius);
 }
 
-.assistant-message {
-  background: white;
-  color: #2c3e50;
-  border: 1px solid #e9ecef;
+.message.bot-message {
+  background: #f4f6fa;
+  color: #222;
+  align-self: flex-start;
+  margin-right: auto;
+  margin-left: 0;
   border-bottom-left-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-bottom-right-radius: var(--ps-bubble-radius);
+  border-top-left-radius: var(--ps-bubble-radius);
+  border-top-right-radius: var(--ps-bubble-radius);
 }
 
+/* 输入区 */
 .input-area {
   display: flex;
-  gap: 12px;
-  padding: 20px;
-  border-top: 1px solid #e9ecef;
-  background: #f8f9fa;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
+  align-items: center;
+  padding: 20px 20px;
+  border-top: 1px solid #f0f0f0;
+  background: #fff;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .chat-window {
+    border-radius: 8px;
+  }
+  .messages-scroll-area {
+    padding: 10px 6px;
+  }
+  .input-area {
+    padding: 10px 8px;
+  }
+}
+
+/* 产品通知样式 */
+.product-notification {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #155724;
+}
+
+.product-notification span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .input-area input {
   flex: 1;
   padding: 12px 16px;
   border: 2px solid #e9ecef;
-  border-radius: 25px;
+  border-radius: var(--ps-btn-radius);
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s ease;
@@ -168,10 +225,6 @@
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
-.user-message {
-  background: linear-gradient(135deg, #1a5f7a 0%, #2c88aa 100%);
-}
-
 .send-button {
   background: linear-gradient(135deg, #f3c04c 0%, #e6b33d 100%);
 }
@@ -198,29 +251,38 @@
   .input-area {
     padding: 16px;
     flex-direction: column;
-    gap: 8px;
   }
   
   .send-button {
-    align-self: flex-end;
+    min-width: auto;
   }
 }
 
-/* 滚动条样式 */
+/* 滚动条样式 - 统一内嵌风格 */
+.product-area::-webkit-scrollbar,
 .messages-scroll-area::-webkit-scrollbar {
   width: 6px;
 }
-
+.product-area::-webkit-scrollbar-track,
 .messages-scroll-area::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 3px;
 }
-
+.product-area::-webkit-scrollbar-thumb,
 .messages-scroll-area::-webkit-scrollbar-thumb {
-  background: #2c88aa;
+  background: #c1c1c1;
   border-radius: 3px;
 }
-
+.product-area::-webkit-scrollbar-thumb:hover,
 .messages-scroll-area::-webkit-scrollbar-thumb:hover {
-  background: #1a5f7a;
+  background: #a8a8a8;
+}
+
+:root {
+  --ps-btn-radius: 25px;
+  --ps-bubble-radius: 18px;
+}
+
+.send-button {
+  border-radius: var(--ps-btn-radius);
 }

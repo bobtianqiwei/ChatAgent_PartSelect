@@ -13,10 +13,9 @@ import React, { useState, useEffect, useRef } from "react";
 import "./ChatWindow.css";
 import { getAIMessage, searchProducts, checkCompatibility } from "../api/api";
 import { marked } from "marked";
-import ProductCard from "./ProductCard";
 import CompatibilityChecker from "./CompatibilityChecker";
 
-function ChatWindow() {
+function ChatWindow({ onProductDisplay }) {
   const defaultMessage = [{
     role: "assistant",
     content: "Hi! I'm your PartSelect assistant. I can help you find refrigerator and dishwasher parts, check compatibility, and provide installation guidance. How can I help you today?"
@@ -49,6 +48,10 @@ function ChatWindow() {
         const partNumber = partMatch[1];
         const products = await searchProducts(partNumber);
         if (products.length > 0) {
+          // 通知父组件显示产品
+          if (onProductDisplay) {
+            onProductDisplay(products[0]);
+          }
           return {
             ...aiResponse,
             type: "product",
@@ -99,62 +102,42 @@ function ChatWindow() {
     }
   };
 
-  // 渲染不同类型的消息
-  const renderMessage = (message, index) => {
-    if (message.type === 'product') {
-      return (
-        <div>
-          <div className={`message ${message.role}-message`}>
-            <div dangerouslySetInnerHTML={{__html: marked(message.content)}}></div>
-          </div>
-          <ProductCard product={message.product} />
-        </div>
-      );
-    }
-    
-    if (message.type === 'compatibility') {
-      return (
-        <div>
-          <div className={`message ${message.role}-message`}>
-            <div dangerouslySetInnerHTML={{__html: marked(message.content)}}></div>
-          </div>
-          <CompatibilityChecker data={message.data} />
-        </div>
-      );
-    }
-    
-    return (
-      <div className={`message ${message.role}-message`}>
-        <div dangerouslySetInnerHTML={{__html: marked(message.content)}}></div>
-      </div>
-    );
-  };
-
   return (
-    <div className="messages-container">
+    <div className="chat-window">
       <div className="messages-scroll-area">
         {messages.map((message, index) => (
-          <div key={index} className={`${message.role}-message-container`}>
-            {renderMessage(message, index)}
+          <div
+            key={index}
+            className={`message ${message.role === 'user' ? 'user-message' : 'bot-message'}`}
+            style={{ alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start' }}
+          >
+            <div dangerouslySetInnerHTML={{__html: marked(message.content)}}></div>
+            {message.type === 'product' && (
+              <div className="product-notification">
+                <span>✅ Product information displayed in the sidebar</span>
+              </div>
+            )}
+            {message.type === 'compatibility' && (
+              <CompatibilityChecker data={message.data} />
+            )}
           </div>
         ))}
-        
         {isLoading && (
-          <div className="loading-message">
-            <div className="typing-indicator">
-              <div className="typing-dots">
-                <span></span>
-                <span></span>
-                <span></span>
+          <div className="message bot-message">
+            <div className="loading-message">
+              <div className="typing-indicator">
+                <div className="typing-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                PartSelect Assistant is typing...
               </div>
-              PartSelect Assistant is typing...
             </div>
           </div>
         )}
-
         <div ref={messagesEndRef} />
       </div>
-      
       <div className="input-area">
         <input
           value={input}
