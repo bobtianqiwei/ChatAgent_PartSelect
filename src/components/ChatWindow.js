@@ -9,229 +9,175 @@
  * product display, compatibility checking, and real-time messaging.
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import "./ChatWindow.css";
 import { getAIMessage, searchProducts, checkCompatibility } from "../api/api";
 import { marked } from "marked";
 import ProductCard from "./ProductCard";
-import CompatibilityCheck from "./CompatibilityCheck";
+import CompatibilityChecker from "./CompatibilityChecker";
 
-const ChatWindow = () => {
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      content: `Welcome to PartSelect! I'm your specialized assistant for refrigerator and dishwasher parts. 
+function ChatWindow() {
+  const defaultMessage = [{
+    role: "assistant",
+    content: "Hi! I'm your PartSelect assistant. I can help you find refrigerator and dishwasher parts, check compatibility, and provide installation guidance. How can I help you today?"
+  }];
 
-I can help you with:
-• Finding the right parts for your appliance
-• Checking compatibility with your model
-• Installation guides and instructions
-• Troubleshooting common issues
-
-What can I help you with today?`,
-      timestamp: new Date()
-    }
-  ]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [messages, setMessages] = useState(defaultMessage);
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [compatibilityData, setCompatibilityData] = useState(null);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+  // 智能消息处理 - 优先使用DeepSeek API，同时保留特殊功能
+  const processUserQuery = async (userQuery) => {
+    const query = userQuery.toLowerCase();
+    
+    // 首先尝试获取DeepSeek AI响应
+    let aiResponse = await getAIMessage(userQuery);
+    
+    // 检查是否需要显示产品卡片
+    if (query.includes('part number') || query.includes('search for')) {
+      const partMatch = query.match(/part number (\w+)/i);
+      if (partMatch) {
+        const partNumber = partMatch[1];
+        const products = await searchProducts(partNumber);
+        if (products.length > 0) {
+          return {
+            ...aiResponse,
+            type: "product",
+            product: products[0]
+          };
+        }
+      }
+    }
+    
+    // 检查是否需要显示兼容性检查
+    if (query.includes('compatible') || query.includes('compatibility')) {
+      const modelMatch = query.match(/model (\w+)/i);
+      if (modelMatch) {
+        const modelNumber = modelMatch[1];
+        const compatibilityData = await checkCompatibility(modelNumber);
+        if (compatibilityData.compatible) {
+          return {
+            ...aiResponse,
+            type: "compatibility",
+            data: compatibilityData
+          };
+        }
+      }
+    }
+    
+    // 返回DeepSeek AI响应
+    return aiResponse;
+  };
 
-    const userMessage = {
-      role: 'user',
-      content: inputMessage,
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
+  const handleSend = async (input) => {
+    if (input.trim() === "") return;
+    
     setIsLoading(true);
+    setMessages(prev => [...prev, { role: "user", content: input }]);
+    setInput("");
 
     try {
-      // Always try DeepSeek first
-      const response = await fetch('http://localhost:3001/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: inputMessage }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        
-        const assistantMessage = {
-          role: 'assistant',
-          content: data.content,
-          timestamp: new Date()
-        };
-
-        setMessages(prev => [...prev, assistantMessage]);
-
-        // Check for product information in the response
-        if (data.products && data.products.length > 0) {
-          setProducts(data.products);
-        }
-
-        // Check for compatibility data
-        if (data.compatibility) {
-          setCompatibilityData(data.compatibility);
-        }
-      } else {
-        throw new Error('Failed to get response');
-      }
+      const response = await processUserQuery(input);
+      setMessages(prev => [...prev, response]);
     } catch (error) {
-      console.error('Error sending message:', error);
-      
-      const errorMessage = {
-        role: 'assistant',
-        content: `I apologize, but I'm having trouble connecting right now. Please try again in a moment, or contact our customer service for immediate assistance.`,
-        timestamp: new Date()
-      };
-      
-      setMessages(prev => [...prev, errorMessage]);
+      console.error('Error processing message:', error);
+      setMessages(prev => [...prev, {
+        role: "assistant",
+        content: "Sorry, I encountered an error. Please try again."
+      }]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
+  // 渲染不同类型的消息
+  const renderMessage = (message, index) => {
+    if (message.type === 'product') {
+      return (
+        <div>
+          <div className={`message ${message.role}-message`}>
+            <div dangerouslySetInnerHTML={{__html: marked(message.content)}}></div>
+          </div>
+          <ProductCard product={message.product} />
+        </div>
+      );
     }
+    
+    if (message.type === 'compatibility') {
+      return (
+        <div>
+          <div className={`message ${message.role}-message`}>
+            <div dangerouslySetInnerHTML={{__html: marked(message.content)}}></div>
+          </div>
+          <CompatibilityChecker data={message.data} />
+        </div>
+      );
+    }
+    
+    return (
+      <div className={`message ${message.role}-message`}>
+        <div dangerouslySetInnerHTML={{__html: marked(message.content)}}></div>
+      </div>
+    );
   };
-
-  const clearChat = () => {
-    setMessages([
-      {
-        role: 'assistant',
-        content: `Welcome back! I'm here to help with your refrigerator and dishwasher parts. What do you need assistance with?`,
-        timestamp: new Date()
-      }
-    ]);
-    setProducts([]);
-    setCompatibilityData(null);
-  };
-
-  const getQuickActions = () => [
-    { text: "Find refrigerator parts", action: () => setInputMessage("I need refrigerator parts") },
-    { text: "Find dishwasher parts", action: () => setInputMessage("I need dishwasher parts") },
-    { text: "Check compatibility", action: () => setInputMessage("How do I check if a part is compatible?") },
-    { text: "Installation help", action: () => setInputMessage("I need installation instructions") }
-  ];
 
   return (
-    <div className="chat-window">
-      <div className="chat-header">
-        <div className="header-content">
-          <div className="logo-section">
-            <div className="logo">PartSelect</div>
-            <div className="subtitle">Refrigerator & Dishwasher Parts Specialist</div>
-          </div>
-          <div className="scope-indicator">
-            <span className="scope-badge">Refrigerator & Dishwasher Only</span>
-          </div>
-        </div>
-        <button className="clear-chat-btn" onClick={clearChat}>
-          Clear Chat
-        </button>
-      </div>
-
-      <div className="chat-messages">
+    <div className="messages-container">
+      <div className="messages-scroll-area">
         {messages.map((message, index) => (
-          <div key={index} className={`message ${message.role}`}>
-            <div className="message-content">
-              <div className="message-text" dangerouslySetInnerHTML={{ __html: message.content.replace(/\n/g, '<br>') }} />
-              <div className="message-timestamp">
-                {message.timestamp.toLocaleTimeString()}
-              </div>
-            </div>
+          <div key={index} className={`${message.role}-message-container`}>
+            {renderMessage(message, index)}
           </div>
         ))}
         
         {isLoading && (
-          <div className="message assistant">
-            <div className="message-content">
-              <div className="typing-indicator">
+          <div className="loading-message">
+            <div className="typing-indicator">
+              <div className="typing-dots">
                 <span></span>
                 <span></span>
                 <span></span>
               </div>
+              PartSelect Assistant is typing...
             </div>
           </div>
         )}
-        
+
         <div ref={messagesEndRef} />
       </div>
-
-      {products.length > 0 && (
-        <div className="products-section">
-          <h3>Related Products</h3>
-          <div className="products-grid">
-            {products.map((product, index) => (
-              <ProductCard key={index} product={product} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {compatibilityData && (
-        <div className="compatibility-section">
-          <CompatibilityCheck compatibilityData={compatibilityData} />
-        </div>
-      )}
-
-      <div className="quick-actions">
-        {getQuickActions().map((action, index) => (
-          <button
-            key={index}
-            className="quick-action-btn"
-            onClick={action.action}
-          >
-            {action.text}
-          </button>
-        ))}
-      </div>
-
-      <div className="chat-input">
-        <div className="input-container">
-          <textarea
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask about refrigerator or dishwasher parts..."
-            disabled={isLoading}
-            rows="1"
-          />
-          <button 
-            onClick={handleSendMessage} 
-            disabled={isLoading || !inputMessage.trim()}
-            className="send-button"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-            </svg>
-          </button>
-        </div>
-        <div className="input-hint">
-          💡 I can help with refrigerator and dishwasher parts only
-        </div>
+      
+      <div className="input-area">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Ask about parts, compatibility, or installation..."
+          onKeyPress={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              handleSend(input);
+              e.preventDefault();
+            }
+          }}
+          disabled={isLoading}
+        />
+        <button 
+          className="send-button"
+          onClick={() => handleSend(input)}
+          disabled={isLoading}
+        >
+          Send
+        </button>
       </div>
     </div>
   );
-};
+}
 
 export default ChatWindow;

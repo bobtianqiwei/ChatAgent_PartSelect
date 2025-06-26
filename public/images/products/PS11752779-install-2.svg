@@ -1,0 +1,50 @@
+
+<svg width="200" height="150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e9ecef;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="step" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2c88aa;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#2c88aa;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="200" height="150" fill="url(#bg)" stroke="#e9ecef" stroke-width="1"/>
+  
+  <!-- Step Number -->
+  <circle cx="30" cy="30" r="15" fill="url(#step)" stroke="#2c88aa" stroke-width="2"/>
+  <text x="30" y="35" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="middle">
+    2
+  </text>
+  
+  <!-- Installation Icon -->
+  <g transform="translate(100, 60)">
+    <rect x="-20" y="-15" width="40" height="30" fill="none" stroke="#2c88aa" stroke-width="2" rx="3"/>
+    <circle cx="-10" cy="-5" r="2" fill="#2c88aa"/>
+    <circle cx="10" cy="-5" r="2" fill="#2c88aa"/>
+    <circle cx="0" cy="5" r="2" fill="#2c88aa"/>
+    <line x1="-15" y1="10" x2="15" y2="10" stroke="#2c88aa" stroke-width="1"/>
+  </g>
+  
+  <!-- Step Title -->
+  <text x="100" y="100" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2c3e50" text-anchor="middle" dominant-baseline="middle">
+    Step 2
+  </text>
+  
+  <!-- Part Number -->
+  <text x="100" y="115" font-family="Arial, sans-serif" font-size="10" fill="#6c757d" text-anchor="middle" dominant-baseline="middle">
+    PS11752779
+  </text>
+  
+  <!-- Progress -->
+  <text x="100" y="130" font-family="Arial, sans-serif" font-size="9" fill="#2c88aa" text-anchor="middle" dominant-baseline="middle">
+    2 of 3
+  </text>
+  
+  <!-- Installation Guide -->
+  <text x="100" y="145" font-family="Arial, sans-serif" font-size="8" fill="#f3c04c" text-anchor="middle" dominant-baseline="middle">
+    Installation Guide
+  </text>
+</svg>

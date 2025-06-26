@@ -11,14 +11,16 @@ A React-based chat assistant for PartSelect e-commerce website, specializing in 
 - **AI-Powered Chat**: DeepSeek language model integration for intelligent responses
 - **Product Search**: Search for refrigerator and dishwasher parts
 - **Compatibility Checks**: Verify part compatibility with appliance models
-- **Installation Guides**: Step-by-step installation instructions
+- **Installation Guides**: Step-by-step installation instructions with visual guides
 - **Troubleshooting Support**: Common appliance issue solutions
 - **Modern UI/UX**: Responsive React interface with real-time chat
+- **Product Images**: High-quality SVG product images and installation diagrams
 
 ### Advanced Features 🆕
 - **Vector Database Integration**: Semantic search using Pinecone
 - **Enhanced Product Discovery**: AI-powered product recommendations
 - **Context-Aware Responses**: Relevant product information in AI responses
+- **Visual Installation Guides**: Step-by-step installation with images and videos
 
 ## 🛠️ Technology Stack
 
@@ -26,6 +28,7 @@ A React-based chat assistant for PartSelect e-commerce website, specializing in 
 - **Backend**: Node.js, Express.js
 - **AI**: DeepSeek API
 - **Vector Database**: Pinecone (optional)
+- **Images**: SVG graphics for products and installation guides
 - **Development**: npm, Git
 
 ## 📋 Prerequisites
@@ -69,6 +72,25 @@ A React-based chat assistant for PartSelect e-commerce website, specializing in 
    - Add it to `config.js`
    - The system will automatically create the index on first run
 
+## 🖼️ Product Images
+
+The application includes realistic product images and installation diagrams:
+
+- **Product Images**: SVG graphics for each product with PartSelect branding
+- **Installation Guides**: Step-by-step visual installation instructions
+- **Local Storage**: All images are stored locally in `/public/images/products/`
+- **No External Dependencies**: No CORS issues or external image loading problems
+
+### Image Features
+- High-quality SVG format for crisp display at any size
+- PartSelect brand colors and styling
+- Installation step diagrams with numbered instructions
+- Product category icons (❄️ for refrigerators, 💧 for dishwashers)
+- Responsive design that works on all devices
+
+### Testing Images
+Visit `http://localhost:3000/test-images.html` to test all product images.
+
 ## 🚀 Running the Application
 
 1. **Start the backend server**
@@ -83,6 +105,12 @@ A React-based chat assistant for PartSelect e-commerce website, specializing in 
    npm start
    ```
    Frontend runs on http://localhost:3000
+
+3. **Test images**
+   ```bash
+   # Open in browser
+   http://localhost:3000/test-images.html
+   ```
 
 ## 📚 API Endpoints
 

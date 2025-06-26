@@ -9,7 +9,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a5f7a 0%, #2c88aa 100%);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -48,14 +48,14 @@
 .logo-text {
   font-size: 32px;
   font-weight: 700;
-  color: #007bff;
+  color: #1a5f7a;
   letter-spacing: -0.5px;
   animation: fadeInDown 0.8s ease-out;
 }
 
 .logo-subtitle {
   font-size: 14px;
-  color: #666;
+  color: #2c88aa;
   font-weight: 500;
   margin-top: 2px;
   animation: fadeInUp 0.8s ease-out 0.2s both;
@@ -63,7 +63,7 @@
 
 .header-info p {
   margin: 0;
-  color: #555;
+  color: #2c3e50;
   font-size: 16px;
   font-weight: 400;
   animation: fadeInUp 0.8s ease-out 0.4s both;
@@ -87,7 +87,7 @@
 
 .footer p {
   margin: 0;
-  color: #666;
+  color: #2c3e50;
   font-size: 14px;
 }
 

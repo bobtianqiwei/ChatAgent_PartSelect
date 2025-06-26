@@ -10,7 +10,14 @@ const sampleProducts = [
     installation: "Easy installation with snap-in design. Simply align the bin with the door shelf and press down until it clicks into place.",
     troubleshooting: "If the bin doesn't fit properly, check for cracks or broken clips. Ensure the door shelf is clean and free of debris.",
     description: "Replacement door shelf bin for Whirlpool refrigerators. Made of durable plastic material.",
-    image: "https://via.placeholder.com/200x150?text=PS11752778"
+    image: "/images/products/PS11752778-main.svg",
+    partSelectUrl: "https://www.partselect.com/PS11752778-Whirlpool-WPW10321304-Refrigerator-Door-Bin.htm?SourceCode=3&SearchTerm=PS11752778",
+    installationVideo: "https://www.youtube.com/watch?v=example1",
+    installationImages: [
+      "/images/products/PS11752778-install-1.svg",
+      "/images/products/PS11752778-install-2.svg",
+      "/images/products/PS11752778-install-3.svg"
+    ]
   },
   {
     id: 2,
@@ -23,7 +30,14 @@ const sampleProducts = [
     installation: "Professional installation recommended. Requires disconnecting power, removing old ice maker, and connecting new assembly.",
     troubleshooting: "If ice maker is not working, check water supply, temperature settings, and electrical connections. Clean ice maker regularly.",
     description: "Complete ice maker assembly for Whirlpool refrigerators. Includes all necessary components for ice production.",
-    image: "https://via.placeholder.com/200x150?text=PS11752779"
+    image: "/images/products/PS11752779-main.svg",
+    partSelectUrl: "https://www.partselect.com/PS11752779-Whirlpool-Ice-Maker-Assembly.htm",
+    installationVideo: "https://www.youtube.com/watch?v=example2",
+    installationImages: [
+      "/images/products/PS11752779-install-1.svg",
+      "/images/products/PS11752779-install-2.svg",
+      "/images/products/PS11752779-install-3.svg"
+    ]
   },
   {
     id: 3,
@@ -36,7 +50,14 @@ const sampleProducts = [
     installation: "Remove old latch, install new one with provided screws. Ensure proper alignment for door closure.",
     troubleshooting: "If door won't close properly, check latch alignment and spring tension. Clean latch mechanism.",
     description: "Replacement door latch for Whirlpool dishwashers. Ensures proper door sealing and safety.",
-    image: "https://via.placeholder.com/200x150?text=PS11752780"
+    image: "/images/products/PS11752780-main.svg",
+    partSelectUrl: "https://www.partselect.com/PS11752780-Whirlpool-Dishwasher-Door-Latch.htm",
+    installationVideo: "https://www.youtube.com/watch?v=example3",
+    installationImages: [
+      "/images/products/PS11752780-install-1.svg",
+      "/images/products/PS11752780-install-2.svg",
+      "/images/products/PS11752780-install-3.svg"
+    ]
   },
   {
     id: 4,
@@ -49,7 +70,14 @@ const sampleProducts = [
     installation: "Complex installation requiring professional service. Involves electrical connections and plumbing.",
     troubleshooting: "If dishwasher won't drain, check pump for clogs. Listen for unusual noises during operation.",
     description: "High-quality pump motor for Whirlpool dishwashers. Ensures proper water circulation and drainage.",
-    image: "https://via.placeholder.com/200x150?text=PS11752781"
+    image: "/images/products/PS11752781-main.svg",
+    partSelectUrl: "https://www.partselect.com/PS11752781-Whirlpool-Dishwasher-Pump-Motor.htm",
+    installationVideo: "https://www.youtube.com/watch?v=example4",
+    installationImages: [
+      "/images/products/PS11752781-install-1.svg",
+      "/images/products/PS11752781-install-2.svg",
+      "/images/products/PS11752781-install-3.svg"
+    ]
   },
   {
     id: 5,
@@ -62,7 +90,14 @@ const sampleProducts = [
     installation: "Turn off water supply, remove old filter, install new filter. Run water for 2-3 minutes to flush.",
     troubleshooting: "Replace filter every 6 months or when water flow decreases. Check for leaks after installation.",
     description: "Genuine Whirlpool water filter. Removes impurities and improves water taste.",
-    image: "https://via.placeholder.com/200x150?text=PS11752782"
+    image: "/images/products/PS11752782-main.svg",
+    partSelectUrl: "https://www.partselect.com/PS11752782-Whirlpool-Refrigerator-Water-Filter.htm",
+    installationVideo: "https://www.youtube.com/watch?v=example5",
+    installationImages: [
+      "/images/products/PS11752782-install-1.svg",
+      "/images/products/PS11752782-install-2.svg",
+      "/images/products/PS11752782-install-3.svg"
+    ]
   }
 ];
 
