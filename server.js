@@ -246,8 +246,10 @@ const processUserQuery = async (userQuery, contextObj = {}) => {
     let dbResultMsg = isCompatible
       ? `Yes, part number ${partNumber} is compatible with model ${modelNumber}.`
       : `Sorry, part number ${partNumber} is NOT compatible with model ${modelNumber}.`;
-    // 再拼 prompt 给 DeepSeek
-    const deepSeekPrompt = `User asked: ${userQuery}\nDatabase result: ${dbResultMsg} Please explain this result to the user in a helpful way.`;
+    // 强化prompt，将IMPORTANT提前并加分隔线
+    const deepSeekPrompt = `IMPORTANT:\nYou MUST NOT contradict the database result below.\nOnly explain or elaborate on the database result, but do NOT change its meaning.\nIf the database result says compatible, you must say compatible.\nIf it says NOT compatible, you must say NOT compatible.\nDO NOT answer based on your own knowledge, only explain the database result.\n\n-----------------\nUser asked: ${userQuery}\nDatabase result: ${dbResultMsg}\n-----------------\n\nPlease explain this result to the user in a helpful way.`;
+    console.log('[DeepSeek Compatibility Debug] dbResultMsg:', dbResultMsg);
+    console.log('[DeepSeek Compatibility Debug] prompt:', deepSeekPrompt);
     const aiExplanation = await callDeepSeekAPI(deepSeekPrompt);
     // 返回结构化结果
     return {
@@ -302,23 +304,28 @@ app.post('/api/chat', async (req, res) => {
 app.get('/api/products', (req, res) => {
   try {
     const { query, category } = req.query;
-    
     let filteredProducts = sampleProducts;
-    
+
     if (query) {
-      filteredProducts = filteredProducts.filter(product => 
-        product.name.toLowerCase().includes(query.toLowerCase()) ||
-        product.partNumber.toLowerCase().includes(query.toLowerCase()) ||
-        product.description.toLowerCase().includes(query.toLowerCase())
-      );
+      // 优先精确匹配partNumber
+      const exact = sampleProducts.filter(product => product.partNumber.toUpperCase() === query.toUpperCase());
+      if (exact.length > 0) {
+        filteredProducts = exact;
+      } else {
+        filteredProducts = filteredProducts.filter(product => 
+          product.name.toLowerCase().includes(query.toLowerCase()) ||
+          product.partNumber.toLowerCase().includes(query.toLowerCase()) ||
+          product.description.toLowerCase().includes(query.toLowerCase())
+        );
+      }
     }
-    
+
     if (category) {
       filteredProducts = filteredProducts.filter(product => 
         product.category.toLowerCase() === category.toLowerCase()
       );
     }
-    
+
     res.json(filteredProducts);
   } catch (error) {
     console.error('Product search error:', error);

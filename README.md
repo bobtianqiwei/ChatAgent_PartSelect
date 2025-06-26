@@ -22,6 +22,17 @@ A React-based chat assistant for PartSelect e-commerce website, specializing in 
 - **Context-Aware Responses**: Relevant product information in AI responses
 - **Visual Installation Guides**: Step-by-step installation with images and videos
 
+## 🎨 UI/UX & Product Card Enhancements (June 2025)
+
+- **Product Card Visual Polish**: Larger border-radius for product cards and installation content, with consistent and comfortable spacing on all sides.
+- **Unified Gray Backgrounds**: All product cards, installation sections, and bot message bubbles now use a unified, slightly deeper gray background for a modern, cohesive look.
+- **Installation Section**: When expanded, the installation area features a large rounded rectangle, deep gray background, and extra bottom padding for visual comfort.
+- **16:9 Video Preview**: Product installation video previews are now true 16:9, with no black bars, and open in a modal on click.
+- **Clickable Compatible Products**: Clicking a compatible product in the compatibility checker instantly displays its product card in the sidebar.
+- **Tighter, Consistent Spacing**: All margins, paddings, and grid layouts have been fine-tuned for a compact, visually balanced experience.
+- **Three-Column Compatibility List**: Compatible part numbers are shown in a 3-column grid for better use of space.
+- **Responsive Design**: All UI elements adapt beautifully to both desktop and mobile screens.
+
 ## 🛠️ Technology Stack
 
 - **Frontend**: React.js, CSS3

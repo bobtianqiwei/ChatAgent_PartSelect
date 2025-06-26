@@ -158,7 +158,7 @@ function ChatWindow({ onProductDisplay }) {
               </div>
             )}
             {message.type === 'compatibility' && (
-              <CompatibilityChecker data={message.data} />
+              <CompatibilityChecker data={message.data} onProductDisplay={onProductDisplay} />
             )}
           </div>
         ))}

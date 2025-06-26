@@ -106,6 +106,19 @@
 - **Fallback**: Graceful degradation for older browsers
 - **Mobile**: Optimized for touch devices
 
+## UI/UX & Product Card Enhancements (June 2025)
+
+- Increased border-radius for product cards and installation content for a softer, modern look
+- Unified gray backgrounds for product cards, installation sections, and bot message bubbles
+- Installation section now features a large rounded rectangle, deep gray background, and extra bottom padding
+- Video previews in product cards are now true 16:9, with no black bars, and open in a modal on click
+- Compatible products in the compatibility checker are clickable and instantly display their product card
+- All spacing, margins, and grid layouts have been fine-tuned for a compact, visually balanced experience
+- Compatible part numbers are shown in a 3-column grid for better use of space
+- All UI elements are fully responsive for both desktop and mobile
+
+**Commit Message**: `feat: Polish product card and compatibility UI, unify backgrounds, improve spacing, and enhance interactivity`
+
 ---
 
 **Commit Message**: `feat: Add local SVG product images with PartSelect branding and installation guides`

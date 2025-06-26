@@ -156,19 +156,10 @@ class VectorDBService {
         const score = queryLower.split(' ').reduce((total, word) => {
           return total + (productText.includes(word) ? 1 : 0);
         }, 0) / queryLower.split(' ').length;
-        
+        // 返回所有字段，防止ProductCard缺字段
         return {
           score,
-          metadata: {
-            partNumber: product.partNumber,
-            name: product.name,
-            category: product.category,
-            price: product.price,
-            description: product.description,
-            installation: product.installation,
-            troubleshooting: product.troubleshooting,
-            compatibility: product.compatibility
-          }
+          metadata: { ...product }
         };
       })
       .filter(result => result.score > 0)

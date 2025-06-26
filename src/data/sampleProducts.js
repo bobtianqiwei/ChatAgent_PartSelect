@@ -108,14 +108,85 @@ const sampleProducts = [
       "/images/products/PS11752782-install-2.svg",
       "/images/products/PS11752782-install-3.svg"
     ]
+  },
+  {
+    id: 6,
+    partNumber: "PS3406971",
+    name: "Lower Dishrack Wheel",
+    category: "Dishwasher",
+    price: 46.00,
+    stockQuantity: 30,
+    compatibility: [
+      "WDT780SAEM1", "WDT750SAEM1", "WDT720SAEM1",
+      "2213222N414", "2213223N414", "2213229N414", "2214523N611", "2214545N711",
+      "66213292K112", "66213299K112", "66513222N410", "66513222N411", "66513222N412", "66513222N413", "66513223N410", "66513223N411", "66513223N412", "66513223N413", "66513223N414", "66513229N410", "66513229N411", "66513229N412", "66513229N413", "66513229N414", "66513252K110", "66513252K111", "66513252K112", "66513252K113", "66513252K114", "66513252K115", "66513253K110", "66513255K110", "66513255K111"
+    ],
+    installation: "Open the dishwasher door and pull out the lower dishrack. Push the tab from both sides of the old wheel assembly to pop it out. Place the new wheel assembly on the rack, make sure the caps overlap the wire from the inside, then clip it in place by pushing the wheel. No tools required. Installation takes less than 15 minutes.",
+    troubleshooting: "If the rack does not roll smoothly, check for debris or damage to the axle. Replace any broken wheels. This part fixes symptoms like not cleaning dishes properly, door won't close, noisy operation, or door latch failure.",
+    description: "This OEM gray Dishwasher Lower Dishrack Wheel Assembly (W10195416) is a plastic kit that allows the rack to slide in and out of the dishwasher easily. If it breaks or becomes damaged, sliding will feel difficult. It attaches directly to the dishrack and measures roughly 3x6 inches. Compatible with many Whirlpool, KitchenAid, Maytag, and Kenmore dishwashers.",
+    image: "/images/products/PS3406971-main.jpg",
+    partSelectUrl: "https://www.partselect.com/PS3406971-Whirlpool-W10195416-Lower-Dishrack-Wheel.htm?SourceCode=19&SearchTerm=WDT780SAEM1&ModelNum=WDT780SAEM1",
+    installationVideo: "https://youtu.be/fz1YHu782Wk",
+    installationImages: [
+      "/images/products/PS3406971-install-1.gif"
+    ],
+    manufacturerPartNumber: "W10195416",
+    manufacturer: "Whirlpool",
+    compatibleBrands: ["Whirlpool", "KitchenAid", "Maytag", "Kenmore"],
+    customerRating: 4.8,
+    reviewCount: 394,
+    difficultyLevel: "Very Easy",
+    installationTime: "15 - 30 mins",
+    warranty: "1 Year Warranty",
+    shipping: "Same-day Shipping",
+    dimensions: "Approximately 3 x 6 inches",
+    symptoms: ["Not cleaning dishes properly", "Door won't close", "Noisy", "Door latch failure"],
+    replacementParts: ["W10195416V", "W10195416VP"]
+  },
+  {
+    id: 7,
+    partNumber: "PS10065979",
+    name: "Upper Rack Adjuster Kit",
+    category: "Dishwasher",
+    price: 49.86,
+    stockQuantity: 18,
+    compatibility: [
+      "WDT780SAEM1", "WDT750SAEM1",
+      "2213222N414", "2213223N414", "2213229N414", "2214523N611", "2214545N711",
+      "66512762K312", "66512762K314", "66512763K312", "66512763K313", "66512763K314",
+      "66512769K312", "66512769K313", "66512769K314", "66512772K312", "66512772K313", "66512772K314",
+      "66512773K313", "66512773K314", "66512774K312", "66512774K313", "66512774K314",
+      "66512776K312", "66512776K314", "66512776K315", "66512779K312", "66512779K313", "66512779K314",
+      "66512813K313", "66513202N410", "66513202N411"
+    ],
+    installation: "Remove the old adjuster assembly from the upper rack using a screwdriver. Attach the new kit using included hardware. Refer to the installation video for step-by-step guidance. Installation takes 30-60 minutes and is rated as 'Really Easy' by customers.",
+    troubleshooting: "If the upper rack is not adjusting, is unstable, or the wheels are broken, inspect the adjuster arms and wheels for damage. Replace the entire kit if necessary. This part fixes symptoms like door won't close, door latch failure, not cleaning dishes properly, and noisy operation.",
+    description: "This authentic Dishwasher Upper Rack Adjuster Kit (W10712395) with white wheels is a kit made up of primarily plastic and metal components. It fits onto the dishwasher rack and connects it to the track, allowing it to slide in and out. If broken, the rack will no longer slide properly. The kit comes with all necessary parts for a dishwasher rack adjuster and is not generally sold individually. Compatible with many Whirlpool, Kenmore, and KitchenAid dishwashers.",
+    image: "/images/products/PS10065979-main.jpg",
+    partSelectUrl: "https://www.partselect.com/PS10065979-Whirlpool-W10712395-Upper-Rack-Adjuster-Kit.htm?SourceCode=19&SearchTerm=WDT780SAEM1&ModelNum=WDT780SAEM1",
+    installationVideo: "https://youtu.be/pZO1rcMwKBc",
+    installationImages: [
+      "/images/products/PS10065979-install-1.gif"
+    ],
+    manufacturerPartNumber: "W10712395",
+    manufacturer: "Whirlpool",
+    compatibleBrands: ["Whirlpool", "Kenmore", "KitchenAid"],
+    customerRating: 4.7,
+    reviewCount: 705,
+    difficultyLevel: "Really Easy",
+    installationTime: "30 - 60 mins",
+    warranty: "1 Year Warranty",
+    shipping: "Same-day Shipping",
+    dimensions: "N/A (kit includes multiple components)",
+    symptoms: ["Door won't close", "Door latch failure", "Not cleaning dishes properly", "Noisy"],
+    replacementParts: ["AP5957560", "W10250159", "W10350375", "W10712395VP"]
   }
 ];
 
 const compatibilityMatrix = {
   "WDT780SAEM1": {
     refrigerator: [],
-    dishwasher: ["PS11752780", "PS11752781"],
-    additional: [
+    dishwasher: [
       "PS3406971",
       "PS10065979",
       "PS972325",
@@ -206,36 +277,6 @@ const troubleshootingGuides = {
     ]
   }
 };
-
-const ensureParts = [
-  { partNumber: "PS3406971", name: "Lower Dishrack Wheel", category: "Dishwasher", description: "协助洗碗架顺滑滑出滑入" },
-  { partNumber: "PS10065979", name: "Upper Rack Adjuster Kit", category: "Dishwasher", description: "用于调整上碗架高度" },
-  { partNumber: "PS972325", name: "Door Balance Link Kit", category: "Dishwasher", description: "支撑打开/关闭门的重量" },
-  { partNumber: "PS11746591", name: "Rack Track Stop", category: "Dishwasher", description: "防止碗架滑出轨道" },
-  { partNumber: "PS11745496", name: "Mounting Bracket", category: "Dishwasher", description: "固定洗碗机与台面连接" },
-  { partNumber: "PS11750093", name: "Rack Positioner / Adjuster", category: "Dishwasher", description: "固定并调整碗架高低" },
-  { partNumber: "PS12348515", name: "Door Seal", category: "Dishwasher", description: "防止漏水，密封门边缘" },
-  { partNumber: "PS11753379", name: "Drain Pump", category: "Dishwasher", description: "负责排水，防止积水" },
-  { partNumber: "PS11750092", name: "Dishrack Adjuster", category: "Dishwasher", description: "协调碗架上下调节功能" },
-  { partNumber: "PS11756967", name: "Door Latch", category: "Dishwasher", description: "保持门闭合使设备启动" },
-  { partNumber: "PS9494999", name: "Heating Element", category: "Dishwasher", description: "提高洗涤水温并用于干燥" },
-  { partNumber: "PS12347809", name: "Silverware Basket", category: "Dishwasher", description: "安放餐具的小篮子" }
-];
-
-ensureParts.forEach(part => {
-  if (!sampleProducts.find(p => p.partNumber === part.partNumber)) {
-    sampleProducts.push({
-      ...part,
-      price: 0,
-      stockQuantity: 0,
-      compatibility: ["WDT780SAEM1"],
-      installation: "",
-      troubleshooting: "",
-      image: "",
-      partSelectUrl: ""
-    });
-  }
-});
 
 module.exports = {
   sampleProducts,

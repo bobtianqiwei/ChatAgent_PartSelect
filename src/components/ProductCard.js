@@ -8,11 +8,11 @@ const ProductCard = ({ product }) => {
 
   if (!product) return null;
 
-  // 强制只显示指定图片
-  const imgSrc = '/images/products/PS11752778-main.jpg';
-  const installImgSrc = '/images/products/PS11752778-install-1.gif';
-  const partSelectUrl = 'https://www.partselect.com/PS11752778-Whirlpool-WPW10321304-Refrigerator-Door-Bin.htm?SourceCode=3&SearchTerm=PS11752778';
-  const youtubeUrl = 'https://youtu.be/zSCNN6KpDE8';
+  // 动态获取图片、安装图片、PartSelect链接、视频等
+  const imgSrc = product.image || '/images/products/placeholder.png';
+  const installImgSrc = (product.installationImages && product.installationImages[0]) || '/images/products/placeholder.png';
+  const partSelectUrl = product.partSelectUrl || '#';
+  const youtubeUrl = product.installationVideo || '';
 
   // 提取YouTube视频ID
   const getYouTubeVideoId = (url) => {
@@ -85,11 +85,6 @@ const ProductCard = ({ product }) => {
             onClick={() => openModal('image')}
             style={{ width: '100%', height: 'auto', objectFit: 'cover', cursor: 'pointer' }}
           />
-          {product.customerRating && (
-            <div className="rating-badge">
-              ★ {product.customerRating}
-            </div>
-          )}
         </div>
         
         {/* 产品信息 */}
@@ -133,25 +128,30 @@ const ProductCard = ({ product }) => {
                 {/* 安装视频 */}
                 <div className="install-video">
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <a 
-                      href={youtubeUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="video-link-compact"
-                      style={{ marginBottom: 8 }}
-                    >
-                      📹 Watch Video
-                    </a>
                     {videoId && (
-                      <div style={{ position: 'relative', width: '100%', maxWidth: 240, cursor: 'pointer' }} onClick={() => openModal('video')}>
+                      <div 
+                        style={{ 
+                          position: 'relative', 
+                          width: '100%', 
+                          maxWidth: 240, 
+                          aspectRatio: '16/9', 
+                          background: '#000', 
+                          borderRadius: 6, 
+                          overflow: 'hidden', 
+                          cursor: 'pointer' 
+                        }} 
+                        onClick={() => openModal('video')}
+                      >
                         <img
                           src={`https://img.youtube.com/vi/${videoId}/0.jpg`}
                           alt="Video thumbnail"
-                          style={{ width: '100%', borderRadius: 6 }}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 6, display: 'block' }}
                         />
                         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', background: 'rgba(0,0,0,0.6)', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <span style={{ color: 'white', fontSize: 22 }}>▶</span>
                         </div>
+                        {/* 占位div用于下方留白，左右与父容器一致 */}
+                        <div style={{ height: 0, marginTop: 12, marginLeft: 0, marginRight: 0 }} />
                       </div>
                     )}
                   </div>
