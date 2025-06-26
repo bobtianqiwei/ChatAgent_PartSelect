@@ -39,7 +39,7 @@ A React-based chat assistant for PartSelect e-commerce website, specializing in 
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/bobtianqiwei/ChatAgent_PartSelect.git
    cd ChatAgent_PartSelect
    ```
 
