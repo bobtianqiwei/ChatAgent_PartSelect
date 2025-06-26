@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
-// 聊天API
+// chat API
 export const getAIMessage = async (userQuery, context = {}) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/chat`, {
@@ -19,7 +19,7 @@ export const getAIMessage = async (userQuery, context = {}) => {
   }
 };
 
-// 产品搜索API
+// product search API
 export const searchProducts = async (query, category = null) => {
   try {
     const params = { query };
@@ -33,7 +33,7 @@ export const searchProducts = async (query, category = null) => {
   }
 };
 
-// 兼容性检查API
+// compatibility check API
 export const checkCompatibility = async (modelNumber) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/compatibility`, {
@@ -46,7 +46,7 @@ export const checkCompatibility = async (modelNumber) => {
   }
 };
 
-// 安装指南API
+// installation guide API
 export const getInstallationGuide = async (partNumber) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/installation/${partNumber}`);
@@ -57,7 +57,7 @@ export const getInstallationGuide = async (partNumber) => {
   }
 };
 
-// 故障排除API
+// troubleshooting help API
 export const getTroubleshootingHelp = async (issue) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/troubleshooting`, {

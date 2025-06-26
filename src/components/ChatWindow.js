@@ -35,36 +35,36 @@ function ChatWindow({ onProductDisplay }) {
     scrollToBottom();
   }, [messages]);
 
-  // 智能消息处理 - 优先使用DeepSeek API，同时保留特殊功能
+  // intelligent message processing - prioritize DeepSeek API, while keeping special features
   const processUserQuery = async (userQuery) => {
     const query = userQuery.toLowerCase();
     let partNumber = null;
-    // 1. 识别part number
+    // 1. recognize part number
     const partMatch = query.match(/part number (ps\d+)/i);
     if (partMatch) {
       partNumber = partMatch[1].toUpperCase();
       setLastPartNumber(partNumber);
-      // 主动查找产品并显示product card
+      // actively search for product and display product card
       const products = await searchProducts(partNumber);
       if (products.length > 0 && onProductDisplay) {
         onProductDisplay(products[0]);
       }
     }
-    // 2. 识别this part指代
+    // 2. recognize this part refers to
     if (!partNumber && /this part/.test(query) && lastPartNumber) {
       partNumber = lastPartNumber;
     }
-    // 3. 兼容性查询
+    // 3. compatibility check
     if ((query.includes('compatible') || query.includes('compatibility')) && partNumber) {
       const modelMatch = query.match(/model (\w+)/i);
       if (modelMatch) {
         const modelNumber = modelMatch[1];
         const compatibilityData = await checkCompatibility(modelNumber);
-        // 检查partNumber是否在兼容列表
+        // check if partNumber is in compatibility list
         const isCompatible =
           (compatibilityData.refrigerator && compatibilityData.refrigerator.includes(partNumber)) ||
           (compatibilityData.dishwasher && compatibilityData.dishwasher.includes(partNumber));
-        // 查找并显示product card
+        // search and display product card
         const products = await searchProducts(partNumber);
         if (products.length > 0 && onProductDisplay) {
           onProductDisplay(products[0]);
@@ -79,7 +79,7 @@ function ChatWindow({ onProductDisplay }) {
         };
       }
     }
-    // 4. 其他情况，走原有逻辑，传递 context
+    // 4. other cases, go to original logic, pass context
     let aiResponse = await getAIMessage(userQuery, { lastPartNumber });
     return aiResponse;
   };
@@ -92,7 +92,7 @@ function ChatWindow({ onProductDisplay }) {
 
     try {
       const query = input.toLowerCase();
-      // 1. 捕获part number（无论上下文）
+      // 1. capture part number (regardless of context)
       let partNumber = null;
       const partNumberMatch = input.match(/ps\d{6,}/i);
       if (partNumberMatch) {
@@ -102,7 +102,7 @@ function ChatWindow({ onProductDisplay }) {
         partNumber = lastPartNumber;
       }
 
-      // 2. 检测兼容性查询
+      // 2. detect compatibility check
       if ((query.includes('compatible') || query.includes('compatibility')) && partNumber) {
         const modelMatch = query.match(/model (\w+)/i);
         if (modelMatch) {
@@ -128,7 +128,7 @@ function ChatWindow({ onProductDisplay }) {
         }
       }
 
-      // 其余情况走原有逻辑，传递 context
+      // other cases go to original logic, pass context
       const response = await processUserQuery(input);
       setMessages(prev => [...prev, response]);
     } catch (error) {

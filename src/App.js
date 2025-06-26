@@ -18,12 +18,12 @@ import { sampleProducts } from "./data/sampleProducts";
 function App() {
   const [currentProduct, setCurrentProduct] = useState(null);
 
-  // 当聊天中触发产品显示时，更新当前产品
+  // when chat triggers product display, update current product
   const handleProductDisplay = (product) => {
     setCurrentProduct(product);
   };
 
-  // 控制 sidebar 显示
+  // control sidebar display
   const showSidebar = !!currentProduct;
 
   return (
@@ -45,7 +45,7 @@ function App() {
           <aside
             className="sidebar"
             style={{
-              marginLeft: "var(--main-side-padding)", // sidebar左边距
+              marginLeft: "var(--main-side-padding)", // sidebar left margin
               marginRight: 0
             }}
           >
@@ -76,7 +76,7 @@ function App() {
         <section
           className={`chat-area ${showSidebar ? '' : 'chat-area-center'}`}
           style={{
-            marginRight: showSidebar ? "var(--main-side-padding)" : "var(--main-side-padding)", // chat-area右边距
+              marginRight: showSidebar ? "var(--main-side-padding)" : "var(--main-side-padding)", // chat-area right margin
             marginLeft: 0
           }}
         >
