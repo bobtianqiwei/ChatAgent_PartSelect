@@ -6,6 +6,11 @@
 
 A React-based chat assistant for PartSelect e-commerce website, specializing in refrigerator and dishwasher parts. Features DeepSeek AI integration, product search, compatibility checks, installation guides, and troubleshooting support.
 
+## 🎥 Demo Video
+
+https://youtu.be/WIz0ok_3UnQ
+
+
 ## 🚀 Core Features
 
 - **AI-Powered Chat**: DeepSeek language model integration for intelligent responses
