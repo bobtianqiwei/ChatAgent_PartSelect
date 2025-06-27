@@ -1,5 +1,8 @@
 # PartSelect Chat Assistant - Instalily AI Case Study
 
+![System Architecture Flowchart](./others/PartSelectChatAgentFlowchart.drawio.png)
+*System architecture flowchart of the PartSelect Chat Agent*
+
 **Developer: Bob Tianqi Wei**  
 **Date: June 2025**
 
