@@ -180,6 +180,142 @@ const sampleProducts = [
     dimensions: "N/A (kit includes multiple components)",
     symptoms: ["Door won't close", "Door latch failure", "Not cleaning dishes properly", "Noisy"],
     replacementParts: ["AP5957560", "W10250159", "W10350375", "W10712395VP"]
+  },
+  {
+    id: 8,
+    partNumber: "PS972325",
+    name: "Dishwasher Door Balance Link Kit",
+    category: "Dishwasher",
+    price: 26.83,
+    stockQuantity: 25,
+    compatibility: [
+      "WDT780SAEM1", "WDT750SAEM1", "WDT720SAEM1",
+      "2213222N414", "2213223N414", "2213229N414", "2214523N611", "2214545N711",
+      "66213292K112", "66213299K112", "66513222N410", "66513222N411", "66513222N412", "66513222N413", "66513223N410", "66513223N411", "66513223N412", "66513223N413", "66513223N414", "66513229N410", "66513229N411", "66513229N412", "66513229N413", "66513229N414", "66513252K110", "66513252K111", "66513252K112", "66513252K113", "66513252K114", "66513252K115", "66513253K110", "66513255K110", "66513255K111"
+    ],
+    installation: "Remove the old door balance link by disconnecting it from the door hinges. Install the new kit by connecting it to the dishwasher door hinges. This helps support the door as it opens and closes.",
+    troubleshooting: "If the door is difficult to open or close, or if it doesn't stay open, check the door balance link for damage or wear. Replace if necessary.",
+    description: "This part is a door balance link kit, also sometimes known as door cable or door spring cable kit, that helps support the door as it opens and closes by connecting to the dishwasher door hinges.",
+    image: "/images/products/PS972325-main.jpg",
+    partSelectUrl: "https://www.partselect.com/PS972325-Whirlpool-8194001-Dishwasher-Door-Balance-Link-Kit.htm?SourceCode=19&SearchTerm=WDT780SAEM1&ModelNum=WDT780SAEM1",
+    installationVideo: "https://youtu.be/X02l3pHeOUI",
+    installationImages: [
+      "/images/products/PS972325-install-1.gif"
+    ],
+    manufacturerPartNumber: "8194001",
+    manufacturer: "Whirlpool",
+    compatibleBrands: ["Whirlpool", "KitchenAid", "Maytag", "Kenmore"],
+    customerRating: 4.9,
+    reviewCount: 223,
+    difficultyLevel: "Easy",
+    installationTime: "15 - 30 mins",
+    warranty: "1 Year Warranty",
+    shipping: "Same-day Shipping",
+    dimensions: "N/A",
+    symptoms: ["Door difficult to open/close", "Door doesn't stay open", "Door slams shut"],
+    replacementParts: ["8194001", "8194001VP"]
+  },
+  {
+    id: 9,
+    partNumber: "PS11746591",
+    name: "Dishwasher Rack Track Stop",
+    category: "Dishwasher",
+    price: 9.65,
+    stockQuantity: 40,
+    compatibility: [
+      "WDT780SAEM1", "WDT750SAEM1", "WDT720SAEM1",
+      "2213222N414", "2213223N414", "2213229N414", "2214523N611", "2214545N711",
+      "66213292K112", "66213299K112", "66513222N410", "66513222N411", "66513222N412", "66513222N413", "66513223N410", "66513223N411", "66513223N412", "66513223N413", "66513223N414", "66513229N410", "66513229N411", "66513229N412", "66513229N413", "66513229N414", "66513252K110", "66513252K111", "66513252K112", "66513252K113", "66513252K114", "66513252K115", "66513253K110", "66513255K110", "66513255K111"
+    ],
+    installation: "Remove the old rack track stop and install the new one in the same position. This part stops the dish rack at the appropriate place when opening and closing the rack.",
+    troubleshooting: "If your dishwasher is not cleaning your dishes properly, the rack stop may be damaged or missing. Check for proper alignment and replace if necessary.",
+    description: "The rack track stop on your dishwasher is designed to stop the dish rack at the appropriate place when opening and closing the rack. If your dishwasher is not cleaning your dishes properly, the rack stop may need replacement.",
+    image: "/images/products/PS11746591-main.jpg",
+    partSelectUrl: "https://www.partselect.com/PS11746591-Whirlpool-WP8565925-Dishwasher-Rack-Track-Stop.htm?SourceCode=19&SearchTerm=WDT780SAEM1&ModelNum=WDT780SAEM1",
+    installationVideo: "https://youtu.be/siE-8HethWg",
+    installationImages: [
+      "/images/products/PS11746591-install-1.gif"
+    ],
+    manufacturerPartNumber: "WP8565925",
+    manufacturer: "Whirlpool",
+    compatibleBrands: ["Whirlpool", "KitchenAid", "Maytag", "Kenmore"],
+    customerRating: 4.9,
+    reviewCount: 107,
+    difficultyLevel: "Very Easy",
+    installationTime: "5 - 10 mins",
+    warranty: "1 Year Warranty",
+    shipping: "Same-day Shipping",
+    dimensions: "Small plastic component",
+    symptoms: ["Not cleaning dishes properly", "Rack doesn't stop properly", "Rack slides too far"],
+    replacementParts: ["WP8565925", "WP8565925VP"]
+  },
+  {
+    id: 10,
+    partNumber: "PS11745496",
+    name: "Dishwasher Mounting Bracket",
+    category: "Dishwasher",
+    price: 13.53,
+    stockQuantity: 35,
+    compatibility: [
+      "WDT780SAEM1", "WDT750SAEM1", "WDT720SAEM1",
+      "2213222N414", "2213223N414", "2213229N414", "2214523N611", "2214545N711",
+      "66213292K112", "66213299K112", "66513222N410", "66513222N411", "66513222N412", "66513222N413", "66513223N410", "66513223N411", "66513223N412", "66513223N413", "66513223N414", "66513229N410", "66513229N411", "66513229N412", "66513229N413", "66513229N414", "66513252K110", "66513252K111", "66513252K112", "66513252K113", "66513252K114", "66513252K115", "66513253K110", "66513255K110", "66513255K111"
+    ],
+    installation: "The mounting bracket is sold individually, without screws. This part secures the upper side of the dishwasher to the underside of the counter or cabinet to prevent the dishwasher from moving, shaking, or vibrating during operation.",
+    troubleshooting: "If the dishwasher is moving, shaking, or vibrating excessively during operation, check the mounting brackets for damage or loose connections. Replace if necessary.",
+    description: "The mounting bracket is sold individually, without screws. This part secures the upper side of the dishwasher to the underside of the counter or cabinet to prevent the dishwasher from moving, shaking, or vibrating during operation.",
+    image: "/images/products/PS11745496-main.jpg",
+    partSelectUrl: "https://www.partselect.com/PS11745496-Whirlpool-WP8269145-Dishwasher-Mounting-Bracket.htm?SourceCode=19&SearchTerm=WDT780SAEM1&ModelNum=WDT780SAEM1",
+    installationVideo: "https://youtu.be/X7SLvFAiTkw",
+    installationImages: [
+      "/images/products/PS11745496-install-1.gif"
+    ],
+    manufacturerPartNumber: "WP8269145",
+    manufacturer: "Whirlpool",
+    compatibleBrands: ["Whirlpool", "KitchenAid", "Maytag", "Kenmore"],
+    customerRating: 4.9,
+    reviewCount: 14,
+    difficultyLevel: "Easy",
+    installationTime: "15 - 30 mins",
+    warranty: "1 Year Warranty",
+    shipping: "Same-day Shipping",
+    dimensions: "Metal bracket component",
+    symptoms: ["Dishwasher moving/shaking", "Excessive vibration", "Loose dishwasher"],
+    replacementParts: ["WP8269145", "WP8269145VP"]
+  },
+  {
+    id: 11,
+    partNumber: "PS11750093",
+    name: "Dishwasher Positioner",
+    category: "Dishwasher",
+    price: 44.11,
+    stockQuantity: 12,
+    compatibility: [
+      "WDT780SAEM1", "WDT750SAEM1", "WDT720SAEM1",
+      "2213222N414", "2213223N414", "2213229N414", "2214523N611", "2214545N711",
+      "66213292K112", "66213299K112", "66513222N410", "66513222N411", "66513222N412", "66513222N413", "66513223N410", "66513223N411", "66513223N412", "66513223N413", "66513223N414", "66513229N410", "66513229N411", "66513229N412", "66513229N413", "66513229N414", "66513252K110", "66513252K111", "66513252K112", "66513252K113", "66513252K114", "66513252K115", "66513253K110", "66513255K110", "66513255K111"
+    ],
+    installation: "Also known as rack adjuster. Sold individually. This is an original part from KitchenAid, Kenmore, Whirlpool, Jenn-Air, and Maytag for use with Dishwashers. The dishrack adjuster arm positioner clip helps maintain proper rack positioning.",
+    troubleshooting: "If the rack is not positioning correctly or is unstable, check the positioner for damage or wear. Replace if necessary to ensure proper rack alignment.",
+    description: "Also known as rack adjuster. Sold individually. This is an original part from KitchenAid, Kenmore, Whirlpool, Jenn-Air, and Maytag for use with Dishwashers. The dishrack adjuster arm positioner clip helps maintain proper rack positioning.",
+    image: "/images/products/PS11750093-main.jpg",
+    partSelectUrl: "https://www.partselect.com/PS11750093-Whirlpool-WPW10195840-Dishwasher-Positioner.htm?SourceCode=19&SearchTerm=WDT780SAEM1&ModelNum=WDT780SAEM1",
+    installationVideo: "https://youtu.be/3no3S5XCunU",
+    installationImages: [
+      "/images/products/PS11750093-install-1.gif"
+    ],
+    manufacturerPartNumber: "WPW10195840",
+    manufacturer: "Whirlpool",
+    compatibleBrands: ["Whirlpool", "KitchenAid", "Maytag", "Kenmore", "Jenn-Air"],
+    customerRating: 4.9,
+    reviewCount: 6,
+    difficultyLevel: "Easy",
+    installationTime: "15 - 30 mins",
+    warranty: "1 Year Warranty",
+    shipping: "Same-day Shipping",
+    dimensions: "Small plastic component",
+    symptoms: ["Rack not positioning correctly", "Unstable rack", "Poor rack alignment"],
+    replacementParts: ["WPW10195840", "WPW10195840VP"]
   }
 ];
 
@@ -192,13 +328,7 @@ const compatibilityMatrix = {
       "PS972325",
       "PS11746591",
       "PS11745496",
-      "PS11750093",
-      "PS12348515",
-      "PS11753379",
-      "PS11750092",
-      "PS11756967",
-      "PS9494999",
-      "PS12347809"
+      "PS11750093"
     ]
   },
   "WDT750SAEM1": {

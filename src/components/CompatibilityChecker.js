@@ -38,6 +38,23 @@ const CompatibilityChecker = ({ data, onProductDisplay }) => {
           </div>
         )}
         
+        {products && products.length > 0 && (
+          <div className="compatible-products">
+            <h4>Compatible Products</h4>
+            <div className="products-grid">
+              {products.slice(0, 6).map((product, index) => (
+                <div key={index} className="product-mini-card" onClick={() => handleProductClick(product)} style={{cursor: 'pointer'}}>
+                  <img src={product.image} alt={product.name} />
+                  <div className="product-mini-info">
+                    <div className="product-mini-name">{product.name}</div>
+                    <div className="product-mini-price">${product.price}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
         {dishwasher && dishwasher.length > 0 && (
           <div className="compatibility-section">
             <h4>Dishwasher Parts</h4>
@@ -52,23 +69,6 @@ const CompatibilityChecker = ({ data, onProductDisplay }) => {
           </div>
         )}
       </div>
-      
-      {products && products.length > 0 && (
-        <div className="compatible-products">
-          <h4>Compatible Products</h4>
-          <div className="products-grid">
-            {products.map((product, index) => (
-              <div key={index} className="product-mini-card" onClick={() => handleProductClick(product)} style={{cursor: 'pointer'}}>
-                <img src={product.image} alt={product.name} />
-                <div className="product-mini-info">
-                  <div className="product-mini-name">{product.name}</div>
-                  <div className="product-mini-price">${product.price}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
       
       <div className="compatibility-footer">
         <p className="disclaimer">
